@@ -41,7 +41,10 @@
    E-mail: harada@acs.i.kyoto-u.ac.jp@n
    URL: http://www-fcs.acs.i.kyoto-u.ac.jp/~harada/index-en.html
 
-   @section Note
+   @subsection Note
+In some cases, the estimation of confidence interval of parameters may not be good, if MC samples are always near the best point of parameters. In the MCMC, the samples are correlated. In the bad case, because the strength of correlations between samples are large, we cannot make many samples with statistical independence. Then, we need to tune the MC steps to resolve it. However, I have no idea to do it automatically yet. I recommend to combine the systematic analysis for the confidence interval with these application codes.
+   
+   @subsection Note
    To spread the Bayesian scaling analysis method,
    I hope you will cite the paper
    (<A HREF="http://hdl.handle.net/10.1103/PhysRevE.84.056704"> Kenji
