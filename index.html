@@ -80,15 +80,17 @@ URL: <a href="http://www-fcs.acs.i.kyoto-u.ac.jp/~harada/index-en.html">http://w
    </DL>
 
    <h4>Compile and test</h4>
-   <p>Firstly, we needs to install 
+   <p>
+     Firstly, we needs to install 
    <a href="http://www.gnu.org/software/gsl/">the GSL library</a> for the class GPR::Regression.
-   After that, we needs to change variables in Makefile: GSL_DIR and BLAS_LIB.</p>
+   After that, we needs to change variables in Makefile: GSL_DIR and BLAS_LIB in CC folder.</p>
 
       <p>To compile and test, we can use "make"
         command as follows.</p>
    <pre>
-   % make
-   % make test</pre>
+% cd CC 
+% make
+% make test</pre>
 
    <p>To see the result of finite-size scaling of Binder ratio of Ising model, one
    can use "gnuplot" as follows.</p>
