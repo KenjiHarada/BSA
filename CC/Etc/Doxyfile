@@ -1,0 +1,20 @@
+PROJECT_NAME           = "Toolkit for Bayesian Scaling Analysis (Public Domain)"
+PROJECT_NUMBER         = 0.1
+PROJECT_LOGO           = "Etc/Ising.gif"
+OUTPUT_LANGUAGE        = English
+
+OUTPUT_DIRECTORY       = Etc/Doxygen
+
+GENERATE_LATEX         = YES
+PREDEFINED             = 
+HAVE_DOT               = YES
+INTERACTIVE_SVG        = YES
+DOT_IMAGE_FORMAT       = svg
+CALL_GRAPH             = YES
+CALLER_GRAPH           = YES
+EXTRACT_ALL            = YES
+EXTRACT_PRIVATE        = YES
+EXTRACT_STATIC         = YES
+HTML_DYNAMIC_SECTIONS  = YES
+GENERATE_TREEVIEW      = YES
+SORT_BRIEF_DOCS        = YES
