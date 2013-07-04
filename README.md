@@ -3,6 +3,6 @@ BSA
 
 Toolkit for Bayesian scaling analysis.
 
-Please go to the page:
+The page is
        http://kenjiharada.github.io/BSA/
 
