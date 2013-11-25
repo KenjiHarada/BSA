@@ -1,11 +1,7 @@
 /* main_cross.cc
  *
- * Copyright 2013, Kenji Harada
- * Released under the MIT and GPLv3 licenses.
+ * Copyright (C) 2012, 2013 Kenji Harada
  *
- * To spread the Bayesian scaling analysis method,
- * I hope you will cite the following original paper:
- *   Kenji Harada, Physical Review E 84 (2011) 056704.
  */
 /**
    @file main_cross.cc
@@ -22,7 +18,7 @@
 typedef GPR::EXTRAPOLATE::Data DATA_TYPE;
 typedef GPR::EXTRAPOLATE::Gaussian_Kernel KERNEL_TYPE;
 
-void setup(int argc, char** argv, std::vector<DATA_TYPE>& data, double& xmin, double& xmax);
+int setup(int argc, char** argv, std::vector<DATA_TYPE>& data, double& xmin, double& xmax);
 void find_cross(const std::vector<DATA_TYPE>& data,
                 const GPR::Regression<DATA_TYPE, KERNEL_TYPE>& bayesian_extrapolation,
                 const std::vector<std::vector<double> >& params, double& xmin, double& xmax);
@@ -42,7 +38,8 @@ int main(int argc, char **argv){
   }
   // setup
   double xmin, xmax;
-  setup(argc, argv, data, xmin, xmax);
+  int num = setup(argc, argv, data, xmin, xmax);
+  std::cout << "# Number of data points= " << num << std::endl;
   // Find maximum log-likelihood
   for (int i = 0; i < 2; ++i)
     bayesian_extrapolation.search_mll(data[i], params[2], masks[2], params[i], masks[i]);
@@ -61,7 +58,7 @@ int main(int argc, char **argv){
     @param[out] xmin minimum value of x
     @param[out] xmax maximum value of x
  */
-void setup(int argc, char** argv, std::vector<DATA_TYPE>& data, double& xmin, double& xmax){
+int setup(int argc, char** argv, std::vector<DATA_TYPE>& data, double& xmin, double& xmax){
   // Load data from file
   if (argc < 3) {
     std::cerr << "### Usage" << std::endl
@@ -74,26 +71,36 @@ void setup(int argc, char** argv, std::vector<DATA_TYPE>& data, double& xmin, do
   }
   std::vector<double> xmins(2);
   std::vector<double> xmaxs(2);
+  int num = 0;
   for (int i = 0; i < 2; ++i) {
     std::ifstream fin(argv[1 + i]);
+    if (!fin.good()) {
+      std::cerr << "Cannot open the file " << argv[1 + i] << std::endl;
+      exit(-1);
+    }
     double x, y, e;
-    int n = 0;
-    do {
+    while (1) {
       char str[256];
       fin.getline(str, 256);
+      if (!fin.good()) break;
       if (str[0] != '#') {
         std::istringstream isst(str);
         isst >> x >> y >> e;
+        if (isst.fail()) break;
         data[i].set(x, y, e);
-        if (n == 0)
+        if (num == 0)
           xmaxs[i] = xmins[i] = x;
         else{
           if (xmins[i] > x) xmins[i] = x;
           if (xmaxs[i] < x) xmaxs[i] = x;
         }
-        ++n;
+        ++num;
       }
-    } while (!fin.eof());
+    }
+  }
+  if (num == 0) {
+    std::cerr << "No data point" << std::endl;
+    exit(-1);
   }
   if (xmaxs[0] > xmins[1] || xmaxs[1] > xmins[0]) {
     std::vector<double> xs;
@@ -115,11 +122,14 @@ void setup(int argc, char** argv, std::vector<DATA_TYPE>& data, double& xmin, do
     double x;
     std::istringstream isst(argv[3]);
     isst >> x;
+    if (isst.fail()) exit(-1);
     if (xmin < x) xmin = x;
     std::istringstream isst2(argv[4]);
     isst2 >> x;
+    if (isst2.fail()) exit(-1);
     if (xmax > x) xmax = x;
   }
+  return num;
 };
 
 /** @brief Output all results

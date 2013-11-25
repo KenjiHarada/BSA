@@ -43,7 +43,7 @@
 
    @subsection Note
 In some cases, the estimation of confidence interval of parameters may not be good, if MC samples are always near the best point of parameters. In the MCMC, the samples are correlated. In the bad case, because the strength of correlations between samples are large, we cannot make many samples with statistical independence. Then, we need to tune the MC steps to resolve it. However, I have no idea to do it automatically yet. I recommend to combine the systematic analysis for the confidence interval with these application codes.
-   
+
    @subsection Note
    To spread the Bayesian scaling analysis method,
    I hope you will cite the paper
@@ -71,6 +71,8 @@ In some cases, the estimation of confidence interval of parameters may not be go
 
    @note
    The documents of the first four applications are written in main_fss.cc.
+   @note
+   The bugs to count the last data point in a data file or STDIN doubly were fixed at the 25th of December 2013.
 
    @section Classes Classes
    There are three classes in this toolkit. The class

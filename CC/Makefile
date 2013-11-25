@@ -32,6 +32,9 @@ clean:
 test:
 	./bfss Sample/Ising-square-Binder.dat 1 0.42 1 0.9 1 0.1 1 1 1 1 1 1 > test.op 2>test.log
 	./bfss_mc Sample/Ising-square-Binder.dat 1 0.42 1 0.9 1 0.1 1 1 1 1 1 1 > test_mc.op 2>test_mc.log
+test_c:
+	./bfss_c Sample/sample-c.dat 1 0.28 1 0.9 0 0 1 1 1 2 1 1 1 1 1 1 > test_c.op 2>test_c.log
+	./bfss_c_mc Sample/sample-c.dat 1 0.28 1 0.9 0 0 1 1 1 2 1 1 1 1 1 1 > test_c_mc.op 2>test_c_mc.log
 doc:
 	doxygen Etc/Doxyfile 
 code:

@@ -1,11 +1,7 @@
 /* main_extrapolate.cc
  *
- * Copyright (C) 2013, Kenji Harada
- * Released under the MIT and GPLv3 licenses.
+ * Copyright (C) 2012, 2013 Kenji Harada
  *
- * To spread the Bayesian scaling analysis method,
- * I hope you will cite the following original paper:
- *   Kenji Harada, Physical Review E 84 (2011) 056704.
  */
 /**
    @file main_extrapolate.cc
@@ -22,7 +18,8 @@
 typedef GPR::EXTRAPOLATE::Data DATA_TYPE;
 typedef GPR::EXTRAPOLATE::Gaussian_Kernel KERNEL_TYPE;
 
-void setup(int argc, char** argv, DATA_TYPE& data, std::vector<double>& x_values);
+int load(char *fname, DATA_TYPE &data);
+int setup(int argc, char** argv, DATA_TYPE& data, std::vector<double>& x_values);
 void output(const DATA_TYPE& data,
             const GPR::Regression<DATA_TYPE, KERNEL_TYPE>& bayesian_extrapolation,
             const std::vector<double>& p_params, const std::vector<double>& h_params,
@@ -41,12 +38,61 @@ int main(int argc, char **argv){
     h_params.push_back(1);
   }
   // setup
-  setup(argc, argv, data, x_values);
+  int num = setup(argc, argv, data, x_values);
+  std::cout << "# Number of data points= " << num << std::endl;
   // Find maximum log-likelihood
   bayesian_extrapolation.search_mll(data, p_params, p_mask, h_params, h_mask);
   // Output
   output(data, bayesian_extrapolation, p_params, h_params, x_values);
   return 0;
+}
+
+/** @brief Load data
+
+    @param[in] fname Name of data file
+    @param[out] data Data
+ */
+int load(char *fname, DATA_TYPE &data){
+  int num = 0;
+  if (*fname == '-') {
+    if (!std::cin.good()) {
+      std::cerr << "No standard input" << std::endl;
+      exit(-1);
+    }
+    while (1) {
+      char str[256];
+      std::cin.getline(str, 256);
+      if (!std::cin.good()) break;
+      if (str[0] != '#') {
+        double x, y, e;
+        std::istringstream isst(str);
+        isst >> x >> y >> e;
+        if (isst.fail()) break;
+        data.set(x, y, e);
+        ++num;
+      }
+    }
+  }else{
+    std::ifstream fin(fname);
+    if (!fin.good()) {
+      std::cerr << "Cannot open the file " << fname << std::endl;
+      exit(-1);
+    }
+    while (1) {
+      char str[256];
+      fin.getline(str, 256);
+      if (!fin.good()) break;
+      if (str[0] != '#') {
+        double x, y, e;
+        std::istringstream isst(str);
+        isst >> x >> y >> e;
+        if (isst.fail()) break;
+        data.set(x, y, e);
+        ++num;
+      }
+    }
+  }
+  return num;
 }
 
 /** @brief Setup of data, parameters and masks
@@ -56,7 +102,7 @@ int main(int argc, char **argv){
     @param[out] data Data
     @param[out] x_values X values of extrapolated points
  */
-void setup(int argc, char** argv, DATA_TYPE& data, std::vector<double>& x_values){
+int setup(int argc, char** argv, DATA_TYPE& data, std::vector<double>& x_values){
   // Load data from file or STDIN
   if (argc < 3) {
     std::cerr << "### Usage" << std::endl
@@ -67,37 +113,18 @@ void setup(int argc, char** argv, DATA_TYPE& data, std::vector<double>& x_values
     std::cerr << KERNEL_TYPE::description("  ");
     exit(-1);
   }
-  if (*argv[1] == '-') {
-    double x, y, e;
-    do {
-      char str[256];
-      std::cin.getline(str, 256);
-      if (str[0] != '#') {
-        std::istringstream isst(str);
-        isst >> x >> y >> e;
-        data.set(x, y, e);
-      }
-    } while (!std::cin.eof());
-  }else{
-    std::ifstream fin(argv[1]);
-    double x, y, e;
-    do {
-      char str[256];
-      fin.getline(str, 256);
-      if (str[0] != '#') {
-        std::istringstream isst(str);
-        isst >> x >> y >> e;
-        data.set(x, y, e);
-      }
-    } while (!fin.eof());
-  }
+  int num = load(argv[1], data);
+
   // set x_values
   for (int i = 2; i < argc; ++i) {
     std::istringstream isst(argv[i]);
     double x;
     isst >> x;
+    if (isst.fail()) break;
     x_values.push_back(x);
   }
+
+  return num;
 };
 
 /** @brief Output all results

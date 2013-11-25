@@ -1,11 +1,7 @@
 /* main_fss.cc
  *
- * Copyright 2013, Kenji Harada
- * Released under the MIT and GPLv3 licenses.
+ * Copyright (C) 2011, 2012, 2013 Kenji Harada
  *
- * To spread the Bayesian scaling analysis method,
- * I hope you will cite the following original paper:
- *   Kenji Harada, Physical Review E 84 (2011) 056704.
  */
 /**
    @file main_fss.cc
@@ -194,9 +190,10 @@ typedef GPR::BSA::FSS_Data FSS_DATA_TYPE;
 #endif
 typedef GPR::BSA::Gaussian_Kernel FSS_KERNEL_TYPE;
 
-void setup(int argc, char** argv, FSS_DATA_TYPE& data,
-           std::vector<double>& p_params, std::vector<int>& p_mask,
-           std::vector<double>& h_params, std::vector<int>& h_mask);
+int load(char *fname, FSS_DATA_TYPE &data);
+int setup(int argc, char** argv, FSS_DATA_TYPE& data,
+          std::vector<double>& p_params, std::vector<int>& p_mask,
+          std::vector<double>& h_params, std::vector<int>& h_mask);
 void output(const FSS_DATA_TYPE& data,
             const GPR::Regression<FSS_DATA_TYPE, FSS_KERNEL_TYPE>& bayesian_fss,
             const std::vector<double>& p_params,
@@ -225,7 +222,12 @@ int main(int argc, char **argv){
   std::vector<int> p_mask, h_mask;
 
   // Setup
-  setup(argc, argv, data, p_params, p_mask, h_params, h_mask);
+  int num = setup(argc, argv, data, p_params, p_mask, h_params, h_mask);
+  if (num == 0) {
+    std::cerr << "No data point" << std::endl;
+    return 0;
+  }
+  std::cout << "# Number of data points= " << num << std::endl;
   // Find maximum log-likelihood
   bayesian_fss.search_mll(data, p_params, p_mask, h_params, h_mask);
 #ifndef MAIN_MC
@@ -271,6 +273,54 @@ int main(int argc, char **argv){
 #endif
 }
 
+/** @brief Load data
+
+    @param[in] fname Name of data file
+    @param[out] data Data
+ */
+int load(char *fname, FSS_DATA_TYPE &data){
+  int num = 0;
+  if (*fname == '-') {
+    if (!std::cin.good()) {
+      std::cerr << "No standard input" << std::endl;
+      exit(-1);
+    }
+    while (1) {
+      char str[256];
+      std::cin.getline(str, 256);
+      if (!std::cin.good()) break;
+      if (str[0] != '#') {
+        std::istringstream isst(str);
+        double l, t, a, ea;
+        isst >> l >> t >> a >> ea;
+        if (isst.fail()) break;
+        data.set(l, t, a, ea);
+        ++num;
+      }
+    }
+  }else{
+    std::ifstream fin(fname);
+    if (!fin.good()) {
+      std::cerr << "Cannot open the file " << fname << std::endl;
+      exit(-1);
+    }
+    while (1) {
+      char str[256];
+      fin.getline(str, 256);
+      if (!fin.good()) break;
+      if (str[0] != '#') {
+        std::istringstream isst(str);
+        double l, t, a, ea;
+        isst >> l >> t >> a >> ea;
+        if (isst.fail()) break;
+        data.set(l, t, a, ea);
+        ++num;
+      }
+    }
+  }
+  return num;
+}
+
 /** @brief Setup of data, parameters and masks
 
     @param[in] argc Number of arguments in command line
@@ -281,9 +331,9 @@ int main(int argc, char **argv){
     @param[out] h_params hyper parameters
     @param[out] h_mask mask of hyper parameters
  */
-void setup(int argc, char** argv, FSS_DATA_TYPE& data,
-           std::vector<double>& p_params, std::vector<int>& p_mask,
-           std::vector<double>& h_params, std::vector<int>& h_mask){
+int setup(int argc, char** argv, FSS_DATA_TYPE& data,
+          std::vector<double>& p_params, std::vector<int>& p_mask,
+          std::vector<double>& h_params, std::vector<int>& h_mask){
   // Load data from file or STDIN
   if (argc != ((data.nparams() + FSS_KERNEL_TYPE::nparams()) * 2 + 2)
       && argc != (data.nparams() * 2 + 2)) {
@@ -301,30 +351,7 @@ void setup(int argc, char** argv, FSS_DATA_TYPE& data,
     std::cerr << FSS_KERNEL_TYPE::description("  ");
     exit(-1);
   }
-  if (*argv[1] == '-') {
-    double l, t, a, ea;
-    do {
-      char str[256];
-      std::cin.getline(str, 256);
-      if (str[0] != '#') {
-        std::istringstream isst(str);
-        isst >> l >> t >> a >> ea;
-        data.set(l, t, a, ea);
-      }
-    } while (!std::cin.eof());
-  }else{
-    std::ifstream fin(argv[1]);
-    double l, t, a, ea;
-    do {
-      char str[256];
-      fin.getline(str, 256);
-      if (str[0] != '#') {
-        std::istringstream isst(str);
-        isst >> l >> t >> a >> ea;
-        data.set(l, t, a, ea);
-      }
-    } while (!fin.eof());
-  }
+  int num = load(argv[1], data);
 
   // Load parameters from command line
   {
@@ -338,12 +365,20 @@ void setup(int argc, char** argv, FSS_DATA_TYPE& data,
     double value;
     for (int i = 0; i < data.nparams(); ++i) {
       isst >> mask >> value;
+      if (isst.fail()) {
+        std::cerr << "Cannot load physical parameters" << std::endl;
+        exit(-1);
+      }
       p_mask.push_back(mask);
       p_params.push_back(value);
     }
     if ((argc - 2) == (data.nparams() + FSS_KERNEL_TYPE::nparams()) * 2) {
       for (int i = 0; i < FSS_KERNEL_TYPE::nparams(); ++i) {
         isst >> mask >> value;
+        if (isst.fail()) {
+          std::cerr << "Cannot load hyper parameters" << std::endl;
+          exit(-1);
+        }
         h_mask.push_back(mask);
         h_params.push_back(value);
       }
@@ -354,7 +389,7 @@ void setup(int argc, char** argv, FSS_DATA_TYPE& data,
       }
     }
     // Initial parameters
-    std::cout << "# initial arguments\n" << "# " << str << std::endl;
+    std::cout << "# Initial arguments" << std::endl << "# " << str << std::endl;
   }
 
 
@@ -370,6 +405,8 @@ void setup(int argc, char** argv, FSS_DATA_TYPE& data,
   for (int i = 0; i < data.nparams(); ++i)
     std::cerr << "# (h_mask[" << i << "], h_params[" << i << "])=(" << h_mask[i] << ", " << h_params[i] << ")" << std::endl;
 #endif
+
+  return num;
 };
 
 /** @brief Output all results
