@@ -131,11 +131,13 @@
    # L   T            A              Error_of_A
    128   4.200000e-01 6.271240e-02   1.336090e-03
    @endcode
-   Comment lines starts with the character '#'. Other lines contain four values.
-   The value of @f$ L @f$ is in the first column of data file.  The
-   value of @f$ T @f$ is in the second column. The value of @f$ A @f$
-   is in the third column. The value of @f$ \delta A @f$
-   is in the fourth column.
+   A line has to be ended with the newline character. Comment lines
+   starts with the character '#'. A null line is ignored. Other lines
+   contain four values.  The value of @f$ L @f$ is in the first column
+   of data file.  The value of @f$ T @f$ is in the second column. The
+   value of @f$ A @f$ is in the third column. The value of @f$ \delta
+   A @f$ is in the fourth column. If a line is not correctly
+   formatted, it will be skipped.
 
    @section output Output of commands
 
@@ -289,11 +291,14 @@ int load(char *fname, FSS_DATA_TYPE &data){
       char str[256];
       std::cin.getline(str, 256);
       if (!std::cin.good()) break;
-      if (str[0] != '#') {
+      if (strlen(str) > 0 && str[0] != '#') {
         std::istringstream isst(str);
         double l, t, a, ea;
         isst >> l >> t >> a >> ea;
-        if (isst.fail()) break;
+        if (isst.fail()) {
+          std::cerr << "# Skip a line (" << str << ")" << std::endl;
+          continue;
+        }
         data.set(l, t, a, ea);
         ++num;
       }
@@ -308,11 +313,14 @@ int load(char *fname, FSS_DATA_TYPE &data){
       char str[256];
       fin.getline(str, 256);
       if (!fin.good()) break;
-      if (str[0] != '#') {
+      if (strlen(str) > 0 && str[0] != '#') {
         std::istringstream isst(str);
         double l, t, a, ea;
         isst >> l >> t >> a >> ea;
-        if (isst.fail()) break;
+        if (isst.fail()) {
+          std::cerr << "# Skip a line (" << str << ")" << std::endl;
+          continue;
+        }
         data.set(l, t, a, ea);
         ++num;
       }

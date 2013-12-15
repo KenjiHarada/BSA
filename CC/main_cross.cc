@@ -83,10 +83,13 @@ int setup(int argc, char** argv, std::vector<DATA_TYPE>& data, double& xmin, dou
       char str[256];
       fin.getline(str, 256);
       if (!fin.good()) break;
-      if (str[0] != '#') {
+      if (strlen(str) > 0 && str[0] != '#') {
         std::istringstream isst(str);
         isst >> x >> y >> e;
-        if (isst.fail()) break;
+        if (isst.fail()) {
+          std::cerr << "# Skip a line (" << str << ")" << std::endl;
+          continue;
+        }
         data[i].set(x, y, e);
         if (num == 0)
           xmaxs[i] = xmins[i] = x;

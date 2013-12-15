@@ -63,11 +63,14 @@ int load(char *fname, DATA_TYPE &data){
       char str[256];
       std::cin.getline(str, 256);
       if (!std::cin.good()) break;
-      if (str[0] != '#') {
+      if (strlen(str) > 0 && str[0] != '#') {
         double x, y, e;
         std::istringstream isst(str);
         isst >> x >> y >> e;
-        if (isst.fail()) break;
+        if (isst.fail()) {
+          std::cerr << "# Skip a line (" << str << ")" << std::endl;
+          continue;
+        }
         data.set(x, y, e);
         ++num;
       }
@@ -82,11 +85,14 @@ int load(char *fname, DATA_TYPE &data){
       char str[256];
       fin.getline(str, 256);
       if (!fin.good()) break;
-      if (str[0] != '#') {
+      if (strlen(str) > 0 && str[0] != '#') {
         double x, y, e;
         std::istringstream isst(str);
         isst >> x >> y >> e;
-        if (isst.fail()) break;
+        if (isst.fail()) {
+          std::cerr << "# Skip a line (" << str << ")" << std::endl;
+          continue;
+        }
         data.set(x, y, e);
         ++num;
       }
