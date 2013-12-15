@@ -217,11 +217,13 @@ The physical parameters are defined as [0] = \( T_c \), [1]
 <pre>
 # L   T            A              Error_of_A
 128   4.200000e-01 6.271240e-02   1.336090e-03</pre>
-<p>Comment lines starts with the character '#'. Other lines contain four values.
-   The value of \( L \) is in the first column of data file.  The
-   value of \( T \) is in the second column. The value of \( A \)
-   is in the third column. The value of \( \delta A \)
-  is in the fourth column.</p>
+<p>A line has to be ended with the newline character. Comment lines
+   starts with the character '#'. A null line is ignored. Other lines
+   contain four values.  The value of \( L \) is in the first column
+   of data file.  The value of \( T \) is in the second column. The
+   value of \( A \) is in the third column. The value of \( \delta A
+   \) is in the fourth column. If a line is not correctly formatted,
+   it will be skipped.</p>
 
 <h3><a name="output" class="anchor" href="#output"><span class="octicon octicon-link">V.</span></a> Output of commands</h3>
 <p>The value of best parameters and the confidential intervals are
