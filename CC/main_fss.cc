@@ -291,7 +291,7 @@ int load(char *fname, FSS_DATA_TYPE &data){
       char str[256];
       std::cin.getline(str, 256);
       if (!std::cin.good()) break;
-      if (strlen(str) > 0 && str[0] != '#') {
+      if (std::strlen(str) > 0 && str[0] != '#') {
         std::istringstream isst(str);
         double l, t, a, ea;
         isst >> l >> t >> a >> ea;

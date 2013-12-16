@@ -12,6 +12,7 @@
    @endcode
 */
 #include <vector>
+#include <cstring>
 #include "gpr.hpp"
 #include "gpr_extrapolate.hpp"
 
@@ -63,7 +64,7 @@ int load(char *fname, DATA_TYPE &data){
       char str[256];
       std::cin.getline(str, 256);
       if (!std::cin.good()) break;
-      if (strlen(str) > 0 && str[0] != '#') {
+      if (std::strlen(str) > 0 && str[0] != '#') {
         double x, y, e;
         std::istringstream isst(str);
         isst >> x >> y >> e;
