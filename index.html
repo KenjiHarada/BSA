@@ -27,7 +27,7 @@ MathJax.Hub.Config({
           <a id="forkme_banner" href="https://github.com/KenjiHarada/BSA">View on GitHub</a>
 
           <h1 id="project_title">Bayesian Scaling Analysis</h1>
-          <h2 id="project_tagline"></h2>
+          <h2 id="project_tagline">CC2</h2>
 
             <section id="downloads">
               <a class="zip_download_link" href="https://github.com/KenjiHarada/BSA/zipball/master">Download this project as a .zip file</a>
@@ -40,235 +40,224 @@ MathJax.Hub.Config({
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
         <h3>
-<a name="welcome" class="anchor" href="#welcome"><span class="octicon octicon-link"></span></a>Welcome to Toolkit for Bayesian Scaling Analysis and the application codes.</h3>
+          <a name="welcome" class="anchor" href="#welcome"><span class="octicon octicon-link"></span></a>Welcome to Toolkit for Bayesian Scaling Analysis and the application code.</h3>
 
-<p>This toolkit consists of C++ classes for Gaussian process regression(GPR) and Bayesian scaling analysis(BSA) and the application codes for the finite-size scaling analysis.</p>
+<p>
+This package includes a reference code of the new kernel method for
+the finite-size scaling analysis of critical phenomena. The new method
+is based on the Gaussian process regression, which is called kernel
+method. After the advent of kernel methods in the machine learning
+community, the method of data analysis was drastically
+changed. Because the kernel method is very flexible for complex real
+data, the power of the kernel method can also help our scaling
+analysis.
+</p>
 
-<p>The BSA is a new method of statistical inference in the scaling analysis of critical phenomena. It is based on Bayesian statistics, most specifically, the GPR. The BSA assumes only the smoothness of a scaling function, and it does not need a form. Thus, it may be more effective than conventional approaches in the scaling analyses of critical phenomena. We find the detail of BSA in the paper (<A HREF="http://hdl.handle.net/10.1103/PhysRevE.84.056704">Kenji Harada, Physical Review E 84 (2011) 056704</a>).</p>
+<p>
+The original
+paper <a href="http://hdl.handle.net/10.1103/PhysRevE.84.056704">[1]</a>
+mainly considered the scaling law without corrections to scaling. The
+recent progress resolves the problem of corrections to scaling
+systematically <a href="http://arxiv.org/abs/1410.3622">[2]</a>. In
+fact, this reference code can deal with a general finite-size scaling
+law with or without corrections to scaling as
+follows: </p>
+\begin{equation}
+A(T, L) = L^{c_2} F[ ( T - T_c) L^{c_1} ],
+\end{equation}
+and
+\begin{equation}
+A(T, L) = L^{c_2} \left(F[ ( T - T_c ) L^{c_1} ] + G[ ( T - T_c ) L^{c_1} ] L^{-c_3} \right),
+\end{equation}
+where \( A \) is an observable, \(L\) is a system size, \(T_c\) is a critical point, and \(c_3 \ge 0\) is an irrelevant critical exponent.
 
-<p>Because the BSA is a new technique, this toolkit is the reference code, but this toolkit is alpha version. Your comment and suggestion are welcome. In particular, there are only C++ codes. I hope the other language codes as python, fortran, c, or perl, etc.. Your contribution is welcome.</p>
+<p>Because we assume only the smoothness of the functions \( F \) and
+\( G \), we do not need to limit the range of data near a critical
+point so that the scaling function is approximated by a
+polynomial. Thus, this code can be widely applied to real data in
+critical phenomena(see the 2nd demo
+in <a href="http://www-fcs.acs.i.kyoto-u.ac.jp/~harada/BSA_demo_en.html">this
+page</a>).  This code also uses a hybrid Monte Carlo to estimate the
+confidential intervals of inferred values.
+</p>
 
-<p>You could see the demonstrations of BSA from <a href="http://www-fcs.acs.i.kyoto-u.ac.jp/~harada/BSA_demo_en.html">this page</a>. The second case in the demonstration corresponds to the inference process of present application code.</p>
-
-<p>I hope that the BSA helps your study.</p>
-
-        <p>July 2013, Kenji Harada (<a href="https://github.com/KenjiHarada" class="user-mention">@KenjiHarada</a>)</p>
-
+<p>I recommend this code for all users of the finite-size scaling
+analysis, because it is very flexible, and it automatically and easily
+can estimates the values of critical exponents and a critical point
+without the technical knowledge. If this new method is useful to your
+study, I hope that you cite my papers to spread this new method.</p>
+<p>October, 2014</p>
+<p>Kenji Harada</p>
 <p>
 Graduate school of informatics, Kyoto University<br>
 E-mail: <a href="mailto:harada@acs.i.kyoto-u.ac.jp">harada@acs.i.kyoto-u.ac.jp</a><br>
 URL: <a href="http://www-fcs.acs.i.kyoto-u.ac.jp/~harada/index_en.html">http://www-fcs.acs.i.kyoto-u.ac.jp/~harada/index_en.html</a><br>
 </p>
+<p>[References] </p>
+<ol>
+<li>
+Kenji Harada: <em> Bayesian inference in the scaling analysis of critical phenomena,</em> Physical Review E <b> 84 </b> (2011) 056704. <br />
+DOI: <a href="http://hdl.handle.net/10.1103/PhysRevE.84.056704">10.1103/PhysRevE.84.056704</a>
+</li>
+<li>
+Kenji Harada: <em> Kernel Method for Corrections to Scaling,</em> <a href="http://arxiv.org/abs/1410.3622">arXiv:1410.3622</a> (2014). </li>
+</ol>
+<hr/>
 
-<h4>Note</h4>
+<h2>Documentation</h2>
+In the following, I explain the new command "new_bfss" in the "CC2" folders. If you want to use the previous commands in the "CC" folders,
+please read <a href="index_cc.html">this old document</a>.
+
+<h3><a class="anchor" id="TOC"></a>
+Table of contents</h3>
 <ul>
-<li>
-In some cases, the estimation of confidence interval of parameters may
-not be good, if MC samples are always near the best point of
-parameters. In the MCMC, the samples are correlated. In the bad case,
-because the strength of correlations between samples are large, we
-cannot make many samples with statistical independence. Then, we
-need to tune the MC steps to resolve it. However, I have no idea to do
-it automatically yet. I recommend to combine the systematic analysis
-for the confidence interval with these application codes.
-</li>
-<li>
-To spread the Bayesian scaling analysis method, I hope you will cite the paper (<A HREF="http://hdl.handle.net/10.1103/PhysRevE.84.056704">Kenji Harada, Physical Review E 84 (2011) 056704</a>) in your report or paper.
-</li>
+<li><a href="index.html#Comp">Compile</a></li>
+<li><a href="index.html#Usage">Usage</a><ul>
+<li><a href="index.html#TEST">Test</a></li>
 </ul>
+</li>
+<li><a href="index.html#Data_format">Format of input data file</a><ul>
+<li><a href="index.html#CASE1">For a single observable</a></li>
+<li><a href="index.html#CASE2">For multiple observables simultaneously</a></li>
+</ul>
+</li>
+<li><a href="index.html#SF">Scaling form and parameters</a><ul>
+<li><a href="index.html#C1A">For a standard scaling form</a></li>
+<li><a href="index.html#C1B">For a scaling form with corrections to scaling</a></li>
+</ul>
+</li>
+<li><a href="index.html#output">Output</a></li>
+</ul>
+<hr/>
 
-<h3><a name="application" class="anchor" href="#application"><span class="octicon octicon-link">I.</span></a> Application codes</h3>
-   This toolkit gives applications for finite-size scaling analysis,
-   extrapolation of a data set and finding a cross of two data set.
-   <DL>
-   <DT> bfss </DT>
-   <DD> Maximum likelihood estimation of scaling parameters. </DD>
-   <DT> bfss_mc </DT>
-   <DD> Monte carlo estimation of mean and confidence interval of scaling parameters. </DD>
-   <DT> bfss_c </DT>
-   <DD> Maximum likelihood estimation of scaling parameters with correction to scaling. </DD>
-   <DT> bfss_c_mc </DT>
-   <DD> Monte carlo estimation of confidence intervals of scaling parameters with correction to scaling. </DD>
-   <DT> bext </DT>
-   <DD> Baysian extrapolation by GPR.</DD>
-   <DT> bcross </DT>
-   <DD> Find a cross of two data set by Baysian extrapolation.</DD>
-   </DL>
-
-   <p>Note: please use the latest version which fixes the bugs.</p>
-
-   <h4>Compile and test</h4>
-   <p>
-     Firstly, we needs to install 
-   <a href="http://www.gnu.org/software/gsl/">the GSL library</a> for the class GPR::Regression.
-   After that, we needs to change variables in Makefile: GSL_DIR and BLAS_LIB in CC folder.</p>
-
-      <p>To compile and test, we can use "make"
-        command as follows.</p>
-   <pre>
-% cd CC 
+<h3><a class="anchor" id="Comp"></a>Compile</h3>
+<p>To compile, you can use "make" command as follows. </p>
+<pre>
 % make
-% make test</pre>
+</pre>
+<p>Before compiling this code, You need to install (FORTRAN-base) BLAS and LAPACK libraries: For example, intel MKL, ACML, or various free implementations. After that, you need to setup CCLIBS in Makefile to link them correctly.</p>
 
-   <p>To see the result of finite-size scaling of Binder ratio of Ising model, one
-   can use "gnuplot" as follows.</p>
-   <pre>
-% gnuplot
-gnuplot> plot "test.op" u 1:2:3 i 0 w e
-gnuplot> plot "test_mc.op" u 1:2:3 i 0 w e
-gnuplot> plot "test_c.op" u 1:2:3 i 0 w e
-gnuplot> plot "test_c_mc.op" u 1:2:3 i 0 w e</pre>
+<h3><a class="anchor" id="Usage"></a>Usage</h3>
+<pre>
+COMMAND [Options] [Data file] [Parameters]
+  [Option]
+    -c                : estimate confidential intervals of parameters by MC
+(default: off)
+    -e MAP::EPSILON   : set an epsilon for FR-CG algorithm
+    -f SCALING::FORM  : set a scaling form [0:standard, 1:with correction](default: 0)
+    -h                : help
+    -i MC::SEED       : set a seed of random number
+    -l MC::LIMIT      : set the limit to the number of MC samples
+    -m MC::NMCS       : set the number of MC samples
+    -n DATA::N        : set the number of data sets (default: 1)
+    -s MAP::STEP_SIZE : set a step size of FR-CG algorithm
+    -t MAP::TOL       : set a tolerance of FR-CG algorithm
+  [Data file]
+    If data_file = &#39;-&#39;, data are loaded from STDIN
+  [Parameters]
+    parameter         := mask [0:fixed, 1:unfixed] + initial_value
+</pre>
+<dl class="section note"><dt>Note</dt><dd><ul>
+<li>Undefined parameters are automatically initialized as default values.
+In the almost cases, you need to set only physical parameters which apear in a scaling law.
+</li>
+<li>It is better to start from good initial values to succeed in the inferences of critical exponents, because it is basically a non-linear optimization problem.</li>
+<li>The computational time in Monte Carlo is long, because this code carefully adjusts the sampling condition in the early stage.</li>
+</ul>
+</dd></dl>
 
-   <h4>Usage</h4>
-   <pre>
-Usage: ./bfss [data_file] [three physical parameter sets] (option)[three hyper parameter sets]
-Usage: ./bfss_mc [data_file] [three physical parameter sets] (option)[three hyper parameter sets]
-Usage: ./bfss_c [data_file] [five physical parameter sets] (option)[three hyper parameter sets]
-Usage: ./bfss_c_mc [data_file] [five physical parameter sets] (option)[three hyper parameter sets]</pre>
-
-   <p>
-   The command "bfss" finds the best finite-size scaling
-   parameters. The command "bfss_mc" calculates the confidential
-   intervals of parameters by Monte Carlo sampling.  The command
-   "bfss_c" finds the best finite-size scaling parameters with
-   correction to scaling. The command "bfss_c_mc" calculates the
-   confidential intervals of parameters by Monte Carlo sampling for
-   the case of correction to scaling.</p>
-
-   <p>If [data_file] is '-', data are loaded from STDIN. A parameter set
-     is a pair of mask and initial value of parameter.</p>
-
-        <p>If mask = 0(1), the parameter is fixed (unfixed).</p>
-
-   <p>Usually, it is better that a hyper parameter starts from 1,
-   because all data are renormalized. If you do not give hyper
-     parameter sets, the default values are 1.</p>
+<h4><a class="anchor" id="TEST"></a>Test</h4>
 
 <pre>
-Example.
-% ./bfss Test/Ising-square-Binder.dat 1 0.42 1 0.9 1 0.1 1 1 1 1 1 1 > test.op 2>test.log
-% ./bfss_mc Test/Ising-square-Binder.dat 1 0.42 1 0.9 1 0.1 1 1 1 1 1 1 > test_mc.op 2>test_mc.log
-% ./bfss_c Sample/sample-c.dat 1 0.28 1 0.9 0 0 1 1 1 2 1 1 1 1 1 1 > test_c.op 2>test_c.log
-% ./bfss_c_mc Sample/sample-c.dat 1 0.28 1 0.9 0 0 1 1 1 2 1 1 1 1 1 1 > test_c_mc.op 2>test_c_mc.log</pre>
+   % make test
+   ./new_bfss Sample/Ising-square-Binder.dat 1 0.42 1 0.9 1 0.1 &gt; test.op 2&gt;test.log
+   ./new_bfss -c Sample/Ising-square-Binder.dat 1 0.42 1 0.9 1 0.1 &gt; test_mc.op 2&gt;test_mc.log
+</pre>
 
-<h3><a name="PP" class="anchor" href="#PP"><span class="octicon octicon-link">II.</span></a> Physical parameters</h3>
-<h4>Scaling law</h4>
-   The finite-size scaling form is written as
-\begin{equation}
-A(T, L) = L^{c_2} F[( T - T_c ) L^{c_1} ],
-\end{equation}
-where \( A \) is an observable. The
-  triplet of a data point is defined as
-\begin{equation}
-X = (T - T_c )
-  (L/L_m)^{c_1} / R_X,\ Y = (A / (L/L_m)^{c_2} - Y_0)/R_Y,\ E = \delta
-  A/ (L/L_m)^{c_2}/R_Y,
-\end{equation}
-where \( \delta A \) is an error of \( A \) and \( L_m \) is the largest \( L \).  Scaling factor \(
-  R_X \) is defined so that the width of X for \( L_m \) is 2.
-  Scaling factor \( R_Y \) and \( Y_0 \) is defined so that Y for
-  \( L_m \) is in [-1:1].  The data ansatz is
-\begin{equation}
- Y \sim F(X) \pm  E. 
-\end{equation} The physical parameters are defined as [0] = \( T_c \), [1]
-  = \( c_1 \), and [2] = \( c_2 \).
+<p> The examples of code's output are in the "Sample" folder.</p>
 
-<h4>Scaling law with correction to scaling</h4>
-The finite-size scaling form with correction to scaling is written as
+<h3><a class="anchor" id="Data_format"></a>Format of input data file</h3>
+<h4><a class="anchor" id="CASE1"></a>For a single observable (DATA::N == 1)</h4>
+<p>The format of data file is as follows. </p>
+<pre>
+# L   T            A              Error_of_A
+128   4.200000e-01 6.271240e-02   1.336090e-03
+</pre>
+
+<p> A line has to be ended with the newline character. Comment lines starts with the character '#'. A null line is ignored. Other lines contain four values. The value of \( L \) is in the 1st column of data file. The value of \( T \) is in the 2nd column. The value of \( A \) is in the 3rd column. The value of \( \delta A \) is in the 4th column. If a line is not correctly formatted, it will be skipped.</p>
+
+<h4><a class="anchor" id="CASE2"></a>For multiple observables simultaneously (DATA::N &gt; 1)</h4>
+<p>In this case, we will apply a finite-size scaling law to data of each observable. But the values of \(T_c\) and \(c_1\) and \(c_3\) are shared. The format of data file is as follows. </p>
+<pre>
+# ID  L   T            A              Error_of_A
+0   128   4.200000e-01 6.271240e-02   1.336090e-03
+</pre>
+
+<p>A line has to be ended with the newline character. Comment lines starts with the character '#'. A null line is ignored. Other lines contain four values. The value of ID is in the 1st column of data file. It is the identification number of data set. It starts from 0. The maximum number is (DATA::N - 1). The value of \( L \) is in the 2nd column. The value of \( T \) is in the 3rd column. The value of \( A \) is in the 4th column. The value of \( \delta A \) is in the 5th column. If a line is not correctly formatted, it will be skipped.</p>
+
+<h3><a class="anchor" id="SF"></a>Scaling form and parameters</h3>
+<h4><a class="anchor" id="C1A"></a>For a standard scaling form</h4>
+<p>The finite-size scaling form is written as </p>
 \begin{equation}
-A(T, L) = L^{c_2} F[
-( T - T_c ) L^{c_1} ] ( 1 + a L^{-w} ),
+A(T, L) = L^{c_2} F[ ( T - T_c ) L^{c_1} ],
 \end{equation}
-where \( A \) is an observable. The triplet of a data point is defined as
-\begin{eqnarray}
-X &=& (T - T_c ) (L/L_m)^{c_1} / R_X,\\
-Y &=& (A / (L/L_m)^{c_2} \times [( 1 + a
-L_m^{-w}) / ( 1 + a L^{-w})] - Y_0)/R_Y,\\
-E &=& \delta A/
-(L/L_m)^{c_2} \times [( 1 + a L_m^{-w}) / ( 1 + a L^{-w})] /R_Y,
-\end{eqnarray}
-where \( \delta A \) is an error of \( A \) and \( L_m \) is the largest \( L \).  Scaling factor \(
-R_X \) is defined so that the width of X for \( L_m \) is 2.
-Scaling factor \( R_Y \) and \( Y_0 \) is defined so that Y for
-\( L_m \) is in [-1:1].  The data ansatz is
+where \( A \) is an observable. The triplet of a point is defined as
+\begin{equation}
+X = (T - T_c ) (L/L_{MAX})^{c_1} / R_X, Y = (A / (L/L_{MAX})^{c_2} - Y_0)/R_Y, E = \delta A/ (L/L_{MAX})^{c_2}/R_Y,
+\end{equation}
+where \( \delta A \) is an error of \( A \) and \( L_{MAX} \) is the largest \( L \). Scaling factor \( R_X \) is defined so that the width of X for \( L_{MAX} \) is 2. Scaling factor \( R_Y \) and \( Y_0 \) is defined so that Y for \( L_{MAX} \) is in [-1:1]. The data ansatz is 
 \begin{equation}
 Y \sim F(X) \pm E.
 \end{equation}
-The physical parameters are defined as [0] = \( T_c \), [1]
-= \( c_1 \), [2] = \( c_2 \), [3] = \( a \), and [4] = \( w \).
 
-<h5>Note</h5>
-<p>This code can be applied to a scaling analysis which has the same
-  form of the finite-size scaling law.</p>
+<p>Kernel function is written as </p>
+\begin{equation}
+k_G(i, j) = \delta_{ij} (E(i)^2 + \theta_0^2) + \theta_1^2 \exp( - |X(i)- X(j)|^2 / 2\theta_2^2 ).
+\end{equation}
+<p>Parameters are defined as Params[0] = \( T_c \), Params[1] = \( c_1 \), Params[2] = \( c_2 \), Params[3] = \( \theta_0 \), Params[4] = \( \theta_1 \), and Params[5] = \( \theta_2 \). Shared parameters are \( T_c \) and \( c_1 \).</p>
 
-<h3><a name="HP" class="anchor" href="#HP"><span class="octicon octicon-link">III.</span></a> Hyper parameters</h3>
-<h4>Kernel function</h4>
-   Kernel function is written as
-   \begin{equation}
-   k_G(i, j) = \delta_{ij} (E_i^2 + \theta_2^2)
-   + \theta_0^2 \exp( - |X_i- X_j|^2 / 2\theta_1^2 ).
-   \end{equation}
-   The hyper parameters are defined as [0] = \( \theta_0 \),
-   [1] = \( \theta_1 \), and [2] = \( \theta_2 \).
+<h4><a class="anchor" id="C1B"></a>For a scaling form with corrections to scaling</h4>
+<p>The finite-size scaling form is written as </p>
+\begin{equation}
+A(T, L) = L^{c_2} F[ ( T - T_c ) L^{c_1}, L^{-c_3} ],
+\end{equation}
+where \( A \) is an observable. The triplet of a point is defined as
+\begin{equation}
+X_1 = (T - T_c ) (L/L_{MAX})^{c_1} / R_X, X_2 = (L/L_{MIN})^{-c_3}, Y = (A / (L/L_{MAX})^{c_2} - Y_0)/R_Y, E = \delta A/ (L/L_{MAX})^{c_2}/R_Y,
+\end{equation}
+where \( \delta A \) is an error of \( A \) and \( L_{MAX} \) is the largest \( L \). Scaling factor \( R_X \) is defined so that the width of X for \( L_{MAX} \) is 2. Scaling factor \( R_Y \) and \( Y_0 \) is defined so that Y for \( L_{MAX}\) is in [-1:1]. The data ansatz is
+\begin{equation}
+Y \sim F(X_1, X_2) \pm E.
+\end{equation}
 
-<h3><a name="data" class="anchor" href="#data"><span class="octicon octicon-link">IV.</span></a> Data file for input</h3>
-<h4>Format</h4>
-        <p>The format of data file is as follows.</p>
+<p>Kernel function is written as </p>
+\begin{equation}
+k_G(i, j) = \delta_{ij} (E(i)^2 + \theta_0^2) + \theta_1^2 \exp\left[ - \frac{|X_1(i)- X_1(j)|^2}{2\theta_2^2}\right] + \theta_3^2 \exp\left[ - \frac{|X_1(i)- X_1(j)|^2}{2\theta_4^2}\right] X_2(i) X_2(j).
+\end{equation}
+<p>Parameters are defined as Params[0] = \( T_c \), Params[1] = \( c_1 \), Params[2] = \( c_3 \), Params[3] = \( c_2 \), Params[4] = \( \theta_0 \), Params[5] = \( \theta_1 \), Params[6] = \( \theta_2 \), Params[7] = \( \theta_3 \), and Params[8] = \( \theta_4 \). Shared parameters are \( T_c, c_1 \) and \( c_3 \).</p>
+<dl class="section note"><dt>Note</dt><dd>In the case of multiple observables, the first part of a parameter list is for shared parameters. The non-shared parameters are repeated after the shared parameters. For example, \( (T_c, c_1, c_3, c_2, \theta_0, \theta_1, \theta_2, \theta_3, \theta_4, c_2&#39;, \theta_0&#39;, \theta_1&#39;, \theta_2&#39;, \theta_3&#39;, \theta_4&#39;)\).</dd></dl>
+
+<h3><a class="anchor" id="output"></a>Output</h3>
+<p>The process of the optimization and sampling of parameters is reported to a standard err channel. The inference results of parameters is reported to a standard output channel. The output for the inference results is explained. The value of inferred parameters and the confidential intervals are written in header as comments. </p>
 <pre>
-# L   T            A              Error_of_A
-128   4.200000e-01 6.271240e-02   1.336090e-03</pre>
-<p>A line has to be ended with the newline character. Comment lines
-   starts with the character '#'. A null line is ignored. Other lines
-   contain four values.  The value of \( L \) is in the first column
-   of data file.  The value of \( T \) is in the second column. The
-   value of \( A \) is in the third column. The value of \( \delta A
-   \) is in the fourth column. If a line is not correctly formatted,
-   it will be skipped.</p>
-
-<h3><a name="output" class="anchor" href="#output"><span class="octicon octicon-link">V.</span></a> Output of commands</h3>
-<p>The value of best parameters and the confidential intervals are
- written in header as comments. The remain consists of three groups.
-  These three groups are separated two null lines.</p>
-
-<p>The first group is the scaling result with unnormalized variables as
- \begin{equation}
-X = (T - T_c ) L^{c_1}, Y = A / L^{c_2}, E = \delta A/
- L^{c_2}.
-\end{equation}
-In all groups, the best parameters are used.  In the case
- of commands "bfss_mc" and "bfss_c_mc", the average of parameters are
- used. The line of output contains a list of \( X, Y, E, L, T, A,
-  \mbox{and}\ \delta A.\)</p>
-
-<p> The second one consists of 100 points of the inferred
- scaling function with unnormalized variables. The line
-  contains a list of \( X, \mu(X), \sqrt{\sigma^2(X)} \).</p>
-
-<p> The third one is the
- scaling result with normalized variables as
-\begin{equation} X = (T - T_c )
- (L/L_m)^{c_1} / R_X,\ Y = (A / (L/L_m)^{c_2} - Y_0)/R_Y,\ E = \delta A/
- (L/L_m)^{c_2}/R_Y.
-\end{equation}
-The line contains a list of \( X, Y, E,
-  L, T, A, \mbox{and}\ \delta A.\)</p>
-
-
-<h4>In the case of correction to scaling</h4>
-<p>The first
-  group is the scaling result with unnormalized variables as
-\begin{equation} X =
-   (T - T_c ) L^{c_1}, Y = A / L^{c_2} / ( 1 + a L^{-w}), E = \delta A/ L^{c_2} / ( 1 + a L^{-w}).
-\end{equation}
-The third one is the scaling result with normalized variables as
-\begin{eqnarray}
-X &=& (T -  T_c ) (L/L_m)^{c_1} / R_X,\\
-Y &=& (A / (L/L_m)^{c_2} \times [( 1 + a
-   L_m^{-w}) / ( 1 + a L^{-w})] - Y_0)/R_Y,\\
-E &=& \delta A/
-   (L/L_m)^{c_2} \times [( 1 + a L_m^{-w}) / ( 1 + a L^{-w})] /R_Y.
-\end{eqnarray}</p>
-   
+# p[0] = 4.4068289283487466e-01 6.5315475997187452e-06 --&gt; Average and standard deviation
+...
+# cov[0, 0]=4.2661114047391705e-11 --&gt; Value of covariance matrix's element
+...
+# local p[0] = 4.4068289283487466e-01 --&gt; Value of parameter for scaling data
+...
+</pre>
+<p>The remain part consists of some outputs for each data set. A output for a data set consists of four groups as follows:</p>
+<ul>
+<li>Scaling results</li>
+<li>Scaling function</li>
+<li>Scaling results by normalized variables</li>
+<li>Scaling function by normalized variables</li>
+</ul>
+<p>These output groups are separated two null lines.</p>
+<p>The line of the first group (Scaling results) contains as \( [ (T - T_c ) L^{c_1}, A / L^{c_2}, \delta A/L^{c_2},L, T, A, \delta A ] \) for a standard scaling form, and as \( [ (T - T_c ) L^{c_1}, A / L^{c_2}, \delta A/L^{c_2}, L^{-c_3}, L, T, A, \delta A ] \) for the case of corrections to scaling.</p>
+<p>The second group(Scaling function) consists of 100 points of the inferred scaling function in the thermodynamic limit. The line contains as \( [X, \mu(X), \sqrt{\sigma^2(X)} ]\).</p>
+<p>The third and the fourth groups use a normalized variables. </p>
       </section>
     </div>
 
