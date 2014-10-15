@@ -86,7 +86,7 @@ int load(char *fname, DATA_TYPE &data){
       char str[256];
       fin.getline(str, 256);
       if (!fin.good()) break;
-      if (strlen(str) > 0 && str[0] != '#') {
+      if (std::strlen(str) > 0 && str[0] != '#') {
         double x, y, e;
         std::istringstream isst(str);
         isst >> x >> y >> e;
