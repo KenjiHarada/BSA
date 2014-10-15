@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Bayesian Scaling Analysis : " />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Bayesian Scaling Analysis</title>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+});
+</script>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/KenjiHarada/BSA">View on GitHub</a>
+
+          <h1 id="project_title">Bayesian Scaling Analysis</h1>
+          <h2 id="project_tagline"></h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/KenjiHarada/BSA/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/KenjiHarada/BSA/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h3>
+<a name="welcome" class="anchor" href="#welcome"><span class="octicon octicon-link"></span></a>Welcome to Toolkit for Bayesian Scaling Analysis and the application codes.</h3>
+
+<p>This toolkit consists of C++ classes for Gaussian process regression(GPR) and Bayesian scaling analysis(BSA) and the application codes for the finite-size scaling analysis.</p>
+
+<p>The BSA is a new method of statistical inference in the scaling analysis of critical phenomena. It is based on Bayesian statistics, most specifically, the GPR. The BSA assumes only the smoothness of a scaling function, and it does not need a form. Thus, it may be more effective than conventional approaches in the scaling analyses of critical phenomena. We find the detail of BSA in the paper (<A HREF="http://hdl.handle.net/10.1103/PhysRevE.84.056704">Kenji Harada, Physical Review E 84 (2011) 056704</a>).</p>
+
+<p>Because the BSA is a new technique, this toolkit is the reference code, but this toolkit is alpha version. Your comment and suggestion are welcome. In particular, there are only C++ codes. I hope the other language codes as python, fortran, c, or perl, etc.. Your contribution is welcome.</p>
+
+<p>You could see the demonstrations of BSA from <a href="http://www-fcs.acs.i.kyoto-u.ac.jp/~harada/BSA_demo_en.html">this page</a>. The second case in the demonstration corresponds to the inference process of present application code.</p>
+
+<p>I hope that the BSA helps your study.</p>
+
+        <p>July 2013, Kenji Harada (<a href="https://github.com/KenjiHarada" class="user-mention">@KenjiHarada</a>)</p>
+
+<p>
+Graduate school of informatics, Kyoto University<br>
+E-mail: <a href="mailto:harada@acs.i.kyoto-u.ac.jp">harada@acs.i.kyoto-u.ac.jp</a><br>
+URL: <a href="http://www-fcs.acs.i.kyoto-u.ac.jp/~harada/index_en.html">http://www-fcs.acs.i.kyoto-u.ac.jp/~harada/index_en.html</a><br>
+</p>
+
+<h4>Note</h4>
+<ul>
+<li>
+In some cases, the estimation of confidence interval of parameters may
+not be good, if MC samples are always near the best point of
+parameters. In the MCMC, the samples are correlated. In the bad case,
+because the strength of correlations between samples are large, we
+cannot make many samples with statistical independence. Then, we
+need to tune the MC steps to resolve it. However, I have no idea to do
+it automatically yet. I recommend to combine the systematic analysis
+for the confidence interval with these application codes.
+</li>
+<li>
+To spread the Bayesian scaling analysis method, I hope you will cite the paper (<A HREF="http://hdl.handle.net/10.1103/PhysRevE.84.056704">Kenji Harada, Physical Review E 84 (2011) 056704</a>) in your report or paper.
+</li>
+</ul>
+
+<h3><a name="application" class="anchor" href="#application"><span class="octicon octicon-link">I.</span></a> Application codes</h3>
+   This toolkit gives applications for finite-size scaling analysis,
+   extrapolation of a data set and finding a cross of two data set.
+   <DL>
+   <DT> bfss </DT>
+   <DD> Maximum likelihood estimation of scaling parameters. </DD>
+   <DT> bfss_mc </DT>
+   <DD> Monte carlo estimation of mean and confidence interval of scaling parameters. </DD>
+   <DT> bfss_c </DT>
+   <DD> Maximum likelihood estimation of scaling parameters with correction to scaling. </DD>
+   <DT> bfss_c_mc </DT>
+   <DD> Monte carlo estimation of confidence intervals of scaling parameters with correction to scaling. </DD>
+   <DT> bext </DT>
+   <DD> Baysian extrapolation by GPR.</DD>
+   <DT> bcross </DT>
+   <DD> Find a cross of two data set by Baysian extrapolation.</DD>
+   </DL>
+
+   <p>Note: please use the latest version which fixes the bugs.</p>
+
+   <h4>Compile and test</h4>
+   <p>
+     Firstly, we needs to install 
+   <a href="http://www.gnu.org/software/gsl/">the GSL library</a> for the class GPR::Regression.
+   After that, we needs to change variables in Makefile: GSL_DIR and BLAS_LIB in CC folder.</p>
+
+      <p>To compile and test, we can use "make"
+        command as follows.</p>
+   <pre>
+% cd CC 
+% make
+% make test</pre>
+
+   <p>To see the result of finite-size scaling of Binder ratio of Ising model, one
+   can use "gnuplot" as follows.</p>
+   <pre>
+% gnuplot
+gnuplot> plot "test.op" u 1:2:3 i 0 w e
+gnuplot> plot "test_mc.op" u 1:2:3 i 0 w e
+gnuplot> plot "test_c.op" u 1:2:3 i 0 w e
+gnuplot> plot "test_c_mc.op" u 1:2:3 i 0 w e</pre>
+
+   <h4>Usage</h4>
+   <pre>
+Usage: ./bfss [data_file] [three physical parameter sets] (option)[three hyper parameter sets]
+Usage: ./bfss_mc [data_file] [three physical parameter sets] (option)[three hyper parameter sets]
+Usage: ./bfss_c [data_file] [five physical parameter sets] (option)[three hyper parameter sets]
+Usage: ./bfss_c_mc [data_file] [five physical parameter sets] (option)[three hyper parameter sets]</pre>
+
+   <p>
+   The command "bfss" finds the best finite-size scaling
+   parameters. The command "bfss_mc" calculates the confidential
+   intervals of parameters by Monte Carlo sampling.  The command
+   "bfss_c" finds the best finite-size scaling parameters with
+   correction to scaling. The command "bfss_c_mc" calculates the
+   confidential intervals of parameters by Monte Carlo sampling for
+   the case of correction to scaling.</p>
+
+   <p>If [data_file] is '-', data are loaded from STDIN. A parameter set
+     is a pair of mask and initial value of parameter.</p>
+
+        <p>If mask = 0(1), the parameter is fixed (unfixed).</p>
+
+   <p>Usually, it is better that a hyper parameter starts from 1,
+   because all data are renormalized. If you do not give hyper
+     parameter sets, the default values are 1.</p>
+
+<pre>
+Example.
+% ./bfss Test/Ising-square-Binder.dat 1 0.42 1 0.9 1 0.1 1 1 1 1 1 1 > test.op 2>test.log
+% ./bfss_mc Test/Ising-square-Binder.dat 1 0.42 1 0.9 1 0.1 1 1 1 1 1 1 > test_mc.op 2>test_mc.log
+% ./bfss_c Sample/sample-c.dat 1 0.28 1 0.9 0 0 1 1 1 2 1 1 1 1 1 1 > test_c.op 2>test_c.log
+% ./bfss_c_mc Sample/sample-c.dat 1 0.28 1 0.9 0 0 1 1 1 2 1 1 1 1 1 1 > test_c_mc.op 2>test_c_mc.log</pre>
+
+<h3><a name="PP" class="anchor" href="#PP"><span class="octicon octicon-link">II.</span></a> Physical parameters</h3>
+<h4>Scaling law</h4>
+   The finite-size scaling form is written as
+\begin{equation}
+A(T, L) = L^{c_2} F[( T - T_c ) L^{c_1} ],
+\end{equation}
+where \( A \) is an observable. The
+  triplet of a data point is defined as
+\begin{equation}
+X = (T - T_c )
+  (L/L_m)^{c_1} / R_X,\ Y = (A / (L/L_m)^{c_2} - Y_0)/R_Y,\ E = \delta
+  A/ (L/L_m)^{c_2}/R_Y,
+\end{equation}
+where \( \delta A \) is an error of \( A \) and \( L_m \) is the largest \( L \).  Scaling factor \(
+  R_X \) is defined so that the width of X for \( L_m \) is 2.
+  Scaling factor \( R_Y \) and \( Y_0 \) is defined so that Y for
+  \( L_m \) is in [-1:1].  The data ansatz is
+\begin{equation}
+ Y \sim F(X) \pm  E. 
+\end{equation} The physical parameters are defined as [0] = \( T_c \), [1]
+  = \( c_1 \), and [2] = \( c_2 \).
+
+<h4>Scaling law with correction to scaling</h4>
+The finite-size scaling form with correction to scaling is written as
+\begin{equation}
+A(T, L) = L^{c_2} F[
+( T - T_c ) L^{c_1} ] ( 1 + a L^{-w} ),
+\end{equation}
+where \( A \) is an observable. The triplet of a data point is defined as
+\begin{eqnarray}
+X &=& (T - T_c ) (L/L_m)^{c_1} / R_X,\\
+Y &=& (A / (L/L_m)^{c_2} \times [( 1 + a
+L_m^{-w}) / ( 1 + a L^{-w})] - Y_0)/R_Y,\\
+E &=& \delta A/
+(L/L_m)^{c_2} \times [( 1 + a L_m^{-w}) / ( 1 + a L^{-w})] /R_Y,
+\end{eqnarray}
+where \( \delta A \) is an error of \( A \) and \( L_m \) is the largest \( L \).  Scaling factor \(
+R_X \) is defined so that the width of X for \( L_m \) is 2.
+Scaling factor \( R_Y \) and \( Y_0 \) is defined so that Y for
+\( L_m \) is in [-1:1].  The data ansatz is
+\begin{equation}
+Y \sim F(X) \pm E.
+\end{equation}
+The physical parameters are defined as [0] = \( T_c \), [1]
+= \( c_1 \), [2] = \( c_2 \), [3] = \( a \), and [4] = \( w \).
+
+<h5>Note</h5>
+<p>This code can be applied to a scaling analysis which has the same
+  form of the finite-size scaling law.</p>
+
+<h3><a name="HP" class="anchor" href="#HP"><span class="octicon octicon-link">III.</span></a> Hyper parameters</h3>
+<h4>Kernel function</h4>
+   Kernel function is written as
+   \begin{equation}
+   k_G(i, j) = \delta_{ij} (E_i^2 + \theta_2^2)
+   + \theta_0^2 \exp( - |X_i- X_j|^2 / 2\theta_1^2 ).
+   \end{equation}
+   The hyper parameters are defined as [0] = \( \theta_0 \),
+   [1] = \( \theta_1 \), and [2] = \( \theta_2 \).
+
+<h3><a name="data" class="anchor" href="#data"><span class="octicon octicon-link">IV.</span></a> Data file for input</h3>
+<h4>Format</h4>
+        <p>The format of data file is as follows.</p>
+<pre>
+# L   T            A              Error_of_A
+128   4.200000e-01 6.271240e-02   1.336090e-03</pre>
+<p>A line has to be ended with the newline character. Comment lines
+   starts with the character '#'. A null line is ignored. Other lines
+   contain four values.  The value of \( L \) is in the first column
+   of data file.  The value of \( T \) is in the second column. The
+   value of \( A \) is in the third column. The value of \( \delta A
+   \) is in the fourth column. If a line is not correctly formatted,
+   it will be skipped.</p>
+
+<h3><a name="output" class="anchor" href="#output"><span class="octicon octicon-link">V.</span></a> Output of commands</h3>
+<p>The value of best parameters and the confidential intervals are
+ written in header as comments. The remain consists of three groups.
+  These three groups are separated two null lines.</p>
+
+<p>The first group is the scaling result with unnormalized variables as
+ \begin{equation}
+X = (T - T_c ) L^{c_1}, Y = A / L^{c_2}, E = \delta A/
+ L^{c_2}.
+\end{equation}
+In all groups, the best parameters are used.  In the case
+ of commands "bfss_mc" and "bfss_c_mc", the average of parameters are
+ used. The line of output contains a list of \( X, Y, E, L, T, A,
+  \mbox{and}\ \delta A.\)</p>
+
+<p> The second one consists of 100 points of the inferred
+ scaling function with unnormalized variables. The line
+  contains a list of \( X, \mu(X), \sqrt{\sigma^2(X)} \).</p>
+
+<p> The third one is the
+ scaling result with normalized variables as
+\begin{equation} X = (T - T_c )
+ (L/L_m)^{c_1} / R_X,\ Y = (A / (L/L_m)^{c_2} - Y_0)/R_Y,\ E = \delta A/
+ (L/L_m)^{c_2}/R_Y.
+\end{equation}
+The line contains a list of \( X, Y, E,
+  L, T, A, \mbox{and}\ \delta A.\)</p>
+
+
+<h4>In the case of correction to scaling</h4>
+<p>The first
+  group is the scaling result with unnormalized variables as
+\begin{equation} X =
+   (T - T_c ) L^{c_1}, Y = A / L^{c_2} / ( 1 + a L^{-w}), E = \delta A/ L^{c_2} / ( 1 + a L^{-w}).
+\end{equation}
+The third one is the scaling result with normalized variables as
+\begin{eqnarray}
+X &=& (T -  T_c ) (L/L_m)^{c_1} / R_X,\\
+Y &=& (A / (L/L_m)^{c_2} \times [( 1 + a
+   L_m^{-w}) / ( 1 + a L^{-w})] - Y_0)/R_Y,\\
+E &=& \delta A/
+   (L/L_m)^{c_2} \times [( 1 + a L_m^{-w}) / ( 1 + a L^{-w})] /R_Y.
+\end{eqnarray}</p>
+   
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Bayesian Scaling Analysis maintained by <a href="https://github.com/KenjiHarada">KenjiHarada</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
