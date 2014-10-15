@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Bayesian Scaling Analysis : " />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Bayesian Scaling Analysis</title>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+});
+</script>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/KenjiHarada/BSA">View on GitHub</a>
+
+          <h1 id="project_title">Bayesian Scaling Analysis</h1>
+          <h2 id="project_tagline">CC2</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/KenjiHarada/BSA/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/KenjiHarada/BSA/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h3>
+          <a name="welcome" class="anchor" href="#welcome"><span class="octicon octicon-link"></span></a>Document of the new command "new_bfss"</h3>
+The following is the document of the new command "new_bfss" in the "CC2" folders. If you want that of the previous commands in the "CC" folders,
+please read <a href="index_cc.html">this old document</a>.
+
+<h3><a class="anchor" id="TOC"></a>
+Table of contents</h3>
+<ul>
+<li><a href="index.html#Comp">Compile</a></li>
+<li><a href="index.html#Usage">Usage</a><ul>
+<li><a href="index.html#TEST">Test</a></li>
+</ul>
+</li>
+<li><a href="index.html#Data_format">Format of input data file</a><ul>
+<li><a href="index.html#CASE1">For a single observable</a></li>
+<li><a href="index.html#CASE2">For multiple observables simultaneously</a></li>
+</ul>
+</li>
+<li><a href="index.html#SF">Scaling form and parameters</a><ul>
+<li><a href="index.html#C1A">For a standard scaling form</a></li>
+<li><a href="index.html#C1B">For a scaling form with corrections to scaling</a></li>
+</ul>
+</li>
+<li><a href="index.html#output">Output</a></li>
+</ul>
+<hr/>
+
+<h3><a class="anchor" id="Comp"></a>Compile</h3>
+<p>To compile, you can use "make" command as follows. </p>
+<pre>
+% make
+</pre>
+<p>Before compiling this code, You need to install (FORTRAN-base) BLAS and LAPACK libraries: For example, intel MKL, ACML, or various free implementations. After that, you need to setup CCLIBS in Makefile to link them correctly.</p>
+
+<h3><a class="anchor" id="Usage"></a>Usage</h3>
+<pre>
+COMMAND [Options] [Data file] [Parameters]
+  [Option]
+    -c                : estimate confidential intervals of parameters by MC
+(default: off)
+    -e MAP::EPSILON   : set an epsilon for FR-CG algorithm
+    -f SCALING::FORM  : set a scaling form [0:standard, 1:with correction](default: 0)
+    -h                : help
+    -i MC::SEED       : set a seed of random number
+    -l MC::LIMIT      : set the limit to the number of MC samples
+    -m MC::NMCS       : set the number of MC samples
+    -n DATA::N        : set the number of data sets (default: 1)
+    -s MAP::STEP_SIZE : set a step size of FR-CG algorithm
+    -t MAP::TOL       : set a tolerance of FR-CG algorithm
+  [Data file]
+    If data_file = &#39;-&#39;, data are loaded from STDIN
+  [Parameters]
+    parameter         := mask [0:fixed, 1:unfixed] + initial_value
+</pre>
+<dl class="section note"><dt>Note</dt><dd><ul>
+<li>Undefined parameters are automatically initialized as default values.
+In the almost cases, you need to set only physical parameters which apear in a scaling law.
+</li>
+<li>It is better to start from good initial values to succeed in the inferences of critical exponents, because it is basically a non-linear optimization problem.</li>
+<li>The computational time in Monte Carlo is long, because this code carefully adjusts the sampling condition in the early stage.</li>
+</ul>
+</dd></dl>
+
+<h4><a class="anchor" id="TEST"></a>Test</h4>
+
+<pre>
+   % make test
+   ./new_bfss Sample/Ising-square-Binder.dat 1 0.42 1 0.9 1 0.1 &gt; test.op 2&gt;test.log
+   ./new_bfss -c Sample/Ising-square-Binder.dat 1 0.42 1 0.9 1 0.1 &gt; test_mc.op 2&gt;test_mc.log
+</pre>
+
+<p> The examples of code's output are in the "Sample" folder.</p>
+
+<h3><a class="anchor" id="Data_format"></a>Format of input data file</h3>
+<h4><a class="anchor" id="CASE1"></a>For a single observable (DATA::N == 1)</h4>
+<p>The format of data file is as follows. </p>
+<pre>
+# L   T            A              Error_of_A
+128   4.200000e-01 6.271240e-02   1.336090e-03
+</pre>
+
+<p> A line has to be ended with the newline character. Comment lines starts with the character '#'. A null line is ignored. Other lines contain four values. The value of \( L \) is in the 1st column of data file. The value of \( T \) is in the 2nd column. The value of \( A \) is in the 3rd column. The value of \( \delta A \) is in the 4th column. If a line is not correctly formatted, it will be skipped.</p>
+
+<h4><a class="anchor" id="CASE2"></a>For multiple observables simultaneously (DATA::N &gt; 1)</h4>
+<p>In this case, we will apply a finite-size scaling law to data of each observable. But the values of \(T_c\) and \(c_1\) and \(c_3\) are shared. The format of data file is as follows. </p>
+<pre>
+# ID  L   T            A              Error_of_A
+0   128   4.200000e-01 6.271240e-02   1.336090e-03
+</pre>
+
+<p>A line has to be ended with the newline character. Comment lines starts with the character '#'. A null line is ignored. Other lines contain four values. The value of ID is in the 1st column of data file. It is the identification number of data set. It starts from 0. The maximum number is (DATA::N - 1). The value of \( L \) is in the 2nd column. The value of \( T \) is in the 3rd column. The value of \( A \) is in the 4th column. The value of \( \delta A \) is in the 5th column. If a line is not correctly formatted, it will be skipped.</p>
+
+<h3><a class="anchor" id="SF"></a>Scaling form and parameters</h3>
+<h4><a class="anchor" id="C1A"></a>For a standard scaling form</h4>
+<p>The finite-size scaling form is written as </p>
+\begin{equation}
+A(T, L) = L^{c_2} F[ ( T - T_c ) L^{c_1} ],
+\end{equation}
+where \( A \) is an observable. The triplet of a point is defined as
+\begin{equation}
+X = (T - T_c ) (L/L_{MAX})^{c_1} / R_X, Y = (A / (L/L_{MAX})^{c_2} - Y_0)/R_Y, E = \delta A/ (L/L_{MAX})^{c_2}/R_Y,
+\end{equation}
+where \( \delta A \) is an error of \( A \) and \( L_{MAX} \) is the largest \( L \). Scaling factor \( R_X \) is defined so that the width of X for \( L_{MAX} \) is 2. Scaling factor \( R_Y \) and \( Y_0 \) is defined so that Y for \( L_{MAX} \) is in [-1:1]. The data ansatz is 
+\begin{equation}
+Y \sim F(X) \pm E.
+\end{equation}
+
+<p>Kernel function is written as </p>
+\begin{equation}
+k_G(i, j) = \delta_{ij} (E(i)^2 + \theta_0^2) + \theta_1^2 \exp( - |X(i)- X(j)|^2 / 2\theta_2^2 ).
+\end{equation}
+<p>Parameters are defined as Params[0] = \( T_c \), Params[1] = \( c_1 \), Params[2] = \( c_2 \), Params[3] = \( \theta_0 \), Params[4] = \( \theta_1 \), and Params[5] = \( \theta_2 \). Shared parameters are \( T_c \) and \( c_1 \).</p>
+
+<h4><a class="anchor" id="C1B"></a>For a scaling form with corrections to scaling</h4>
+<p>The finite-size scaling form is written as </p>
+\begin{equation}
+A(T, L) = L^{c_2} F[ ( T - T_c ) L^{c_1}, L^{-c_3} ],
+\end{equation}
+where \( A \) is an observable. The triplet of a point is defined as
+\begin{equation}
+X_1 = (T - T_c ) (L/L_{MAX})^{c_1} / R_X, X_2 = (L/L_{MIN})^{-c_3}, Y = (A / (L/L_{MAX})^{c_2} - Y_0)/R_Y, E = \delta A/ (L/L_{MAX})^{c_2}/R_Y,
+\end{equation}
+where \( \delta A \) is an error of \( A \) and \( L_{MAX} \) is the largest \( L \). Scaling factor \( R_X \) is defined so that the width of X for \( L_{MAX} \) is 2. Scaling factor \( R_Y \) and \( Y_0 \) is defined so that Y for \( L_{MAX}\) is in [-1:1]. The data ansatz is
+\begin{equation}
+Y \sim F(X_1, X_2) \pm E.
+\end{equation}
+
+<p>Kernel function is written as </p>
+\begin{equation}
+k_G(i, j) = \delta_{ij} (E(i)^2 + \theta_0^2) + \theta_1^2 \exp\left[ - \frac{|X_1(i)- X_1(j)|^2}{2\theta_2^2}\right] + \theta_3^2 \exp\left[ - \frac{|X_1(i)- X_1(j)|^2}{2\theta_4^2}\right] X_2(i) X_2(j).
+\end{equation}
+<p>Parameters are defined as Params[0] = \( T_c \), Params[1] = \( c_1 \), Params[2] = \( c_3 \), Params[3] = \( c_2 \), Params[4] = \( \theta_0 \), Params[5] = \( \theta_1 \), Params[6] = \( \theta_2 \), Params[7] = \( \theta_3 \), and Params[8] = \( \theta_4 \). Shared parameters are \( T_c, c_1 \) and \( c_3 \).</p>
+<dl class="section note"><dt>Note</dt><dd>In the case of multiple observables, the first part of a parameter list is for shared parameters. The non-shared parameters are repeated after the shared parameters. For example, \( (T_c, c_1, c_3, c_2, \theta_0, \theta_1, \theta_2, \theta_3, \theta_4, c_2&#39;, \theta_0&#39;, \theta_1&#39;, \theta_2&#39;, \theta_3&#39;, \theta_4&#39;)\).</dd></dl>
+
+<h3><a class="anchor" id="output"></a>Output</h3>
+<p>The process of the optimization and sampling of parameters is reported to a standard err channel. The inference results of parameters is reported to a standard output channel. The output for the inference results is explained. The value of inferred parameters and the confidential intervals are written in header as comments. </p>
+<pre>
+# p[0] = 4.4068289283487466e-01 6.5315475997187452e-06 --&gt; Average and standard deviation
+...
+# cov[0, 0]=4.2661114047391705e-11 --&gt; Value of covariance matrix's element
+...
+# local p[0] = 4.4068289283487466e-01 --&gt; Value of parameter for scaling data
+...
+</pre>
+<p>The remain part consists of some outputs for each data set. A output for a data set consists of four groups as follows:</p>
+<ul>
+<li>Scaling results</li>
+<li>Scaling function</li>
+<li>Scaling results by normalized variables</li>
+<li>Scaling function by normalized variables</li>
+</ul>
+<p>These output groups are separated two null lines.</p>
+<p>The line of the first group (Scaling results) contains as \( [ (T - T_c ) L^{c_1}, A / L^{c_2}, \delta A/L^{c_2},L, T, A, \delta A ] \) for a standard scaling form, and as \( [ (T - T_c ) L^{c_1}, A / L^{c_2}, \delta A/L^{c_2}, L^{-c_3}, L, T, A, \delta A ] \) for the case of corrections to scaling.</p>
+<p>The second group(Scaling function) consists of 100 points of the inferred scaling function in the thermodynamic limit. The line contains as \( [X, \mu(X), \sqrt{\sigma^2(X)} ]\).</p>
+<p>The third and the fourth groups use a normalized variables. </p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Bayesian Scaling Analysis maintained by <a href="https://github.com/KenjiHarada">KenjiHarada</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
