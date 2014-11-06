@@ -299,6 +299,7 @@ deviation
 #include <list>
 #include <string>
 #include <cstring>
+#include <cmath>
 #include <map>
 #include <iostream>
 #include <sstream>
@@ -658,7 +659,7 @@ void output(const std::vector<FSS_DATASET> &Datasets,
   if (setting.find("USE_MC")->second > 0) {
     for (int i = 0; i < Params.size(); ++i)
       std::cout << "# p[" << i << "] = " << Average[i] << " "
-                << sqrt(Covariance[i + i * Params.size()]) << std::endl;
+                << std::sqrt(Covariance[i + i * Params.size()]) << std::endl;
     for (int i = 0; i < Params.size(); ++i)
       for (int j = 0; j < Params.size(); ++j)
         std::cout << "# cov[" << i << ", " << j
@@ -694,19 +695,21 @@ void output(const std::vector<FSS_DATASET> &Datasets,
       Datasets[t].convert(Params_local, data, xc);
       switch (static_cast<int>(setting.find("SCALING::FORM")->second)) {
       case 1:
-        std::cout << (data[1] - Params_local[0]) * pow(data[0], Params_local[1])
-                  << " " << data[2] * pow(data[0], -Params_local[2]) << " "
-                  << data[3] * pow(data[0], -Params_local[2]) << " "
-                  << pow(data[0], -Params_local[6]) << " " << data[0] << " "
-                  << data[1] << " " << data[2] << " " << data[3] << " "
+        std::cout << (data[1] - Params_local[0]) *
+                         std::pow(data[0], Params_local[1]) << " "
+                  << data[2] * std::pow(data[0], -Params_local[2]) << " "
+                  << data[3] * std::pow(data[0], -Params_local[2]) << " "
+                  << std::pow(data[0], -Params_local[6]) << " " << data[0]
+                  << " " << data[1] << " " << data[2] << " " << data[3] << " "
                   << std::endl;
         break;
       default:
-        std::cout << (data[1] - Params_local[0]) * pow(data[0], Params_local[1])
-                  << " " << data[2] * pow(data[0], -Params_local[2]) << " "
-                  << data[3] * pow(data[0], -Params_local[2]) << " " << data[0]
-                  << " " << data[1] << " " << data[2] << " " << data[3] << " "
-                  << std::endl;
+        std::cout << (data[1] - Params_local[0]) *
+                         std::pow(data[0], Params_local[1]) << " "
+                  << data[2] * std::pow(data[0], -Params_local[2]) << " "
+                  << data[3] * std::pow(data[0], -Params_local[2]) << " "
+                  << data[0] << " " << data[1] << " " << data[2] << " "
+                  << data[3] << " " << std::endl;
         break;
       }
     }
@@ -733,11 +736,12 @@ void output(const std::vector<FSS_DATASET> &Datasets,
                                     &point_regressions);
       for (int i = 0; i < NUM_POINTS; ++i) {
         std::cout << point_regressions[i][2] *
-                         pow(info["LMAX"], Params_local[1]) * info["RX"] << " "
+                         std::pow(info["LMAX"], Params_local[1]) * info["RX"]
+                  << " "
                   << (point_regressions[i][0] * info["RY"] + info["Y0"]) /
-                         pow(info["LMAX"], Params_local[2]) << " "
+                         std::pow(info["LMAX"], Params_local[2]) << " "
                   << point_regressions[i][1] * info["RY"] /
-                         pow(info["LMAX"], Params_local[2]) << std::endl;
+                         std::pow(info["LMAX"], Params_local[2]) << std::endl;
       }
       std::cout << std::endl << std::endl;
     }

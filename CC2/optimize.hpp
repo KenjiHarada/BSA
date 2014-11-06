@@ -59,7 +59,7 @@ private:
                         double stepa, double stepb, double stepc, double fa,
                         double fb, double fc, double tol, double &step_size,
                         std::vector<double> &Xt, double &ft) {
-    const double R = 2 - (1 + sqrt(5)) / 2; // ~ 0.38
+    const double R = 2 - (1 + std::sqrt(5)) / 2; // ~ 0.38
     double stept;
     std::vector<double> G;
 
@@ -69,8 +69,8 @@ private:
     double f0 = fb;
     double x2 = stepc;
     double f2 = fc;
-    double pw2 = fabs(x2 - x1);
-    double pw1 = fabs(x1 - x0);
+    double pw2 = std::fabs(x2 - x1);
+    double pw1 = std::fabs(x1 - x0);
 
     step_size = stepb;
     for (int time = 0; time < 10; ++time) {
@@ -86,8 +86,8 @@ private:
                ra; // quadratic interpolation
         else
           dx = 0;
-        if ((dx > 0 && dx < (stepc - stepb) && fabs(dx) < pw2 / 2) ||
-            (dx < 0 && dx > (stepa - stepb) && fabs(dx) < pw2 / 2))
+        if ((dx > 0 && dx < (stepc - stepb) && std::fabs(dx) < pw2 / 2) ||
+            (dx < 0 && dx > (stepa - stepb) && std::fabs(dx) < pw2 / 2))
           stept = x0 + dx;
         else if ((stepc - stepb) > (stepb - stepa))
           stept = R * (stepc - stepb) + stepb;
@@ -119,9 +119,10 @@ private:
         obj->df(Xt, G);
         double p_g =
             std::inner_product(Direct.begin(), Direct.end(), G.begin(), 0e0);
-        double g = sqrt(std::inner_product(G.begin(), G.end(), G.begin(), 0e0));
+        double g =
+            std::sqrt(std::inner_product(G.begin(), G.end(), G.begin(), 0e0));
         step_size = stept;
-        if (fabs(p_g * factor / g) < tol)
+        if (std::fabs(p_g * factor / g) < tol)
           break;
         if (stept < stepb) {
           stepc = stepb;
@@ -135,7 +136,7 @@ private:
           fb = ft;
         }
         pw2 = pw1;
-        pw1 = fabs(x0 - stept);
+        pw1 = std::fabs(x0 - stept);
         x2 = x1;
         x1 = x0;
         x0 = stept;
@@ -196,12 +197,12 @@ void GPR::OPT::CG_FR<OPT_ObjectiveFunction>::minimize(
     double p_g = std::inner_product(P.begin(), P.end(), G.begin(), 0e0);
     double factor;
     if (p_g > 0)
-      factor = -1e0 / sqrt(pa_norm2);
+      factor = -1e0 / std::sqrt(pa_norm2);
     else
-      factor = 1e0 / sqrt(pa_norm2);
+      factor = 1e0 / std::sqrt(pa_norm2);
 
     // X(k+1)
-    if (sqrt(ga_norm2) < epsilon)
+    if (std::sqrt(ga_norm2) < epsilon)
       break;
     stepc = step_size;
     new_point(XS[is ^ 1], XS[is], P, stepc * factor);
