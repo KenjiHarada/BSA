@@ -9,6 +9,7 @@ The document for this toolkit is in
 ## History
 
 (November 6th 2014) Fixed a bug for the use of the option -t.
+
 (October 15th 2014) Added the "CC2" folder. The "CC2" folder includes
 the code of new command "new_bfss" which deals with a finite-size
 scaling with or without corrections to scaling.
