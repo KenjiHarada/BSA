@@ -194,9 +194,9 @@ public:
                 const std::vector<double> &X1, const std::vector<double> &X2,
                 bool diagonal = false) const {
     double x = Params[4] * Params[4] *
-               exp(-(value_x(Params, X1) - value_x(Params, X2)) *
-                   (value_x(Params, X1) - value_x(Params, X2)) /
-                   (2 * Params[5] * Params[5]));
+               std::exp(-(value_x(Params, X1) - value_x(Params, X2)) *
+                        (value_x(Params, X1) - value_x(Params, X2)) /
+                        (2 * Params[5] * Params[5]));
     if (diagonal)
       return x + value_e(Params, X1) * value_e(Params, X1) +
              Params[3] * Params[3];
@@ -208,10 +208,10 @@ public:
                            const std::vector<double> &X_regression_1,
                            const std::vector<double> &X_regression_2,
                            bool diagonal = false) const {
-    double x =
-        Params[4] * Params[4] * exp(-(X_regression_1[2] - X_regression_2[2]) *
-                                    (X_regression_1[2] - X_regression_2[2]) /
-                                    (2 * Params[5] * Params[5]));
+    double x = Params[4] * Params[4] *
+               std::exp(-(X_regression_1[2] - X_regression_2[2]) *
+                        (X_regression_1[2] - X_regression_2[2]) /
+                        (2 * Params[5] * Params[5]));
     if (diagonal)
       return x + X_regression_1[1] * X_regression_1[1] + Params[3] * Params[3];
     else
@@ -275,8 +275,8 @@ public:
                        std::vector<double> &X) const {
     assert(X_regression.size() == 3);
     assert(X.size() == static_cast<unsigned int>(num_e()));
-    X[2] = (X_regression[0] * RY + Y0) * (pow(X[0] / LMAX, Params[2]));
-    X[3] = (X_regression[1] * RY) * (pow(X[0] / LMAX, Params[2]));
+    X[2] = (X_regression[0] * RY + Y0) * (std::pow(X[0] / LMAX, Params[2]));
+    X[3] = (X_regression[1] * RY) * (std::pow(X[0] / LMAX, Params[2]));
   };
 
   void get_info(std::map<std::string, double> &info) const {
@@ -300,42 +300,44 @@ public:
 private:
   double value_x(const std::vector<double> &Params,
                  const std::vector<double> &X) const {
-    return (X[1] - Params[0]) * pow(X[0] / LMAX, Params[1]) / RX;
+    return (X[1] - Params[0]) * std::pow(X[0] / LMAX, Params[1]) / RX;
   }
 
   double value_dx(const std::vector<double> &Params, int p_index,
                   const std::vector<double> &X) const {
     if (p_index == 0)
-      return -pow(X[0] / LMAX, Params[1]) / RX;
+      return -std::pow(X[0] / LMAX, Params[1]) / RX;
     else if (p_index == 1)
-      return (X[1] - Params[0]) * pow(X[0] / LMAX, Params[1]) / RX *
-             log(X[0] / LMAX);
+      return (X[1] - Params[0]) * std::pow(X[0] / LMAX, Params[1]) / RX *
+             std::log(X[0] / LMAX);
     else
       return 0;
   }
 
   double value_y(const std::vector<double> &Params,
                  const std::vector<double> &X) const {
-    return (X[2] * pow(LMAX / X[0], Params[2]) - Y0) / RY;
+    return (X[2] * std::pow(LMAX / X[0], Params[2]) - Y0) / RY;
   }
 
   double value_dy(const std::vector<double> &Params, int p_index,
                   const std::vector<double> &X) const {
     if (p_index == 2)
-      return X[2] * pow(LMAX / X[0], Params[2]) / RY * log(LMAX / X[0]);
+      return X[2] * std::pow(LMAX / X[0], Params[2]) / RY *
+             std::log(LMAX / X[0]);
     else
       return 0;
   }
 
   double value_e(const std::vector<double> &Params,
                  const std::vector<double> &X) const {
-    return X[3] * pow(LMAX / X[0], Params[2]) / RY;
+    return X[3] * std::pow(LMAX / X[0], Params[2]) / RY;
   }
 
   double value_de(const std::vector<double> &Params, int p_index,
                   const std::vector<double> &X) const {
     if (p_index == 2)
-      return X[3] * pow(LMAX / X[0], Params[2]) / RY * log(LMAX / X[0]);
+      return X[3] * std::pow(LMAX / X[0], Params[2]) / RY *
+             std::log(LMAX / X[0]);
     else
       return 0;
   }
@@ -522,13 +524,13 @@ public:
                 bool diagonal = false) const {
     double x = 0;
     x = Params[5] * Params[5] *
-            exp(-(value_x(Params, X1) - value_x(Params, X2)) *
-                (value_x(Params, X1) - value_x(Params, X2)) /
-                (2 * Params[6] * Params[6])) +
+            std::exp(-(value_x(Params, X1) - value_x(Params, X2)) *
+                     (value_x(Params, X1) - value_x(Params, X2)) /
+                     (2 * Params[6] * Params[6])) +
         Params[7] * Params[7] *
-            exp(-(value_x(Params, X1) - value_x(Params, X2)) *
-                (value_x(Params, X1) - value_x(Params, X2)) /
-                (2 * Params[8] * Params[8])) *
+            std::exp(-(value_x(Params, X1) - value_x(Params, X2)) *
+                     (value_x(Params, X1) - value_x(Params, X2)) /
+                     (2 * Params[8] * Params[8])) *
             value_x2(Params, X1) * value_x2(Params, X2);
     if (diagonal)
       return x + value_e(Params, X1) * value_e(Params, X1) +
@@ -542,12 +544,14 @@ public:
                            const std::vector<double> &X_regression_2,
                            bool diagonal = false) const {
     double x = 0;
-    x = Params[5] * Params[5] * exp(-(X_regression_1[2] - X_regression_2[2]) *
-                                    (X_regression_1[2] - X_regression_2[2]) /
-                                    (2 * Params[6] * Params[6])) +
-        Params[7] * Params[7] * exp(-(X_regression_1[2] - X_regression_2[2]) *
-                                    (X_regression_1[2] - X_regression_2[2]) /
-                                    (2 * Params[8] * Params[8])) *
+    x = Params[5] * Params[5] *
+            std::exp(-(X_regression_1[2] - X_regression_2[2]) *
+                     (X_regression_1[2] - X_regression_2[2]) /
+                     (2 * Params[6] * Params[6])) +
+        Params[7] * Params[7] *
+            std::exp(-(X_regression_1[2] - X_regression_2[2]) *
+                     (X_regression_1[2] - X_regression_2[2]) /
+                     (2 * Params[8] * Params[8])) *
             X_regression_1[3] * X_regression_2[3];
     if (diagonal)
       return x + X_regression_1[1] * X_regression_1[1] + Params[4] * Params[4];
@@ -572,38 +576,38 @@ public:
       if (diagonal)
         return 2 * value_e(Params, X1) * value_de(Params, p_index, X1);
       else
-        return THETA1 * THETA1 *
-                   exp(-(x1a - x1b) * (x1a - x1b) / (2 * THETA2 * THETA2)) *
+        return THETA1 * THETA1 * std::exp(-(x1a - x1b) * (x1a - x1b) /
+                                          (2 * THETA2 * THETA2)) *
                    (-(x1a - x1b) / (THETA2 * THETA2)) *
                    (value_dx(Params, p_index, X1) -
                     value_dx(Params, p_index, X2)) +
-               THETA3 * THETA3 *
-                   exp(-(x1a - x1b) * (x1a - x1b) / (2 * THETA4 * THETA4)) *
+               THETA3 * THETA3 * std::exp(-(x1a - x1b) * (x1a - x1b) /
+                                          (2 * THETA4 * THETA4)) *
                    x2a * x2b * (-(x1a - x1b) / (THETA4 * THETA4)) *
                    (value_dx(Params, p_index, X1) -
                     value_dx(Params, p_index, X2));
     } else {
       if (p_index == 5)
         return 2 * THETA1 *
-               exp(-(x1a - x1b) * (x1a - x1b) / (2 * THETA2 * THETA2));
+               std::exp(-(x1a - x1b) * (x1a - x1b) / (2 * THETA2 * THETA2));
       else if (p_index == 6)
         return THETA1 * THETA1 *
-               exp(-(x1a - x1b) * (x1a - x1b) / (2 * THETA2 * THETA2)) *
+               std::exp(-(x1a - x1b) * (x1a - x1b) / (2 * THETA2 * THETA2)) *
                ((x1a - x1b) * (x1a - x1b) / (THETA2 * THETA2 * THETA2));
       else if (p_index == 4 && diagonal)
         return 2 * THETA0;
       else if (p_index == 2)
         return THETA3 * THETA3 *
-               exp(-(x1a - x1b) * (x1a - x1b) / (2 * THETA4 * THETA4)) *
+               std::exp(-(x1a - x1b) * (x1a - x1b) / (2 * THETA4 * THETA4)) *
                (value_dx2(Params, p_index, X1) * x2b +
                 x2a * value_dx2(Params, p_index, X2));
       else if (p_index == 7)
         return 2 * THETA3 *
-               exp(-(x1a - x1b) * (x1a - x1b) / (2 * THETA4 * THETA4)) *
+               std::exp(-(x1a - x1b) * (x1a - x1b) / (2 * THETA4 * THETA4)) *
                (x2a * x2b);
       else if (p_index == 8)
         return THETA3 * THETA3 *
-               exp(-(x1a - x1b) * (x1a - x1b) / (2 * THETA4 * THETA4)) *
+               std::exp(-(x1a - x1b) * (x1a - x1b) / (2 * THETA4 * THETA4)) *
                (x2a * x2b) *
                ((x1a - x1b) * (x1a - x1b) / (THETA4 * THETA4 * THETA4));
       else
@@ -640,8 +644,8 @@ public:
                        std::vector<double> &X) const {
     assert(X_regression.size() == 4);
     assert(X.size() == static_cast<unsigned int>(num_e()));
-    X[2] = (X_regression[0] * RY + Y0) * (pow(X[0] / LMAX, Params[3]));
-    X[3] = (X_regression[1] * RY) * (pow(X[0] / LMAX, Params[3]));
+    X[2] = (X_regression[0] * RY + Y0) * (std::pow(X[0] / LMAX, Params[3]));
+    X[3] = (X_regression[1] * RY) * (std::pow(X[0] / LMAX, Params[3]));
   };
 
   void get_info(std::map<std::string, double> &info) const {
@@ -668,55 +672,57 @@ public:
 private:
   double value_x(const std::vector<double> &Params,
                  const std::vector<double> &X) const {
-    return (X[1] - Params[0]) * pow(X[0] / LMAX, Params[1]) / RX;
+    return (X[1] - Params[0]) * std::pow(X[0] / LMAX, Params[1]) / RX;
   }
 
   double value_dx(const std::vector<double> &Params, int p_index,
                   const std::vector<double> &X) const {
     if (p_index == 0)
-      return -pow(X[0] / LMAX, Params[1]) / RX;
+      return -std::pow(X[0] / LMAX, Params[1]) / RX;
     else if (p_index == 1)
-      return (X[1] - Params[0]) * pow(X[0] / LMAX, Params[1]) / RX *
-             log(X[0] / LMAX);
+      return (X[1] - Params[0]) * std::pow(X[0] / LMAX, Params[1]) / RX *
+             std::log(X[0] / LMAX);
     else
       return 0;
   }
 
   double value_x2(const std::vector<double> &Params,
                   const std::vector<double> &X) const {
-    return pow(LMIN / X[0], Params[2]);
+    return std::pow(LMIN / X[0], Params[2]);
   }
 
   double value_dx2(const std::vector<double> &Params, int p_index,
                    const std::vector<double> &X) const {
     if (p_index == 2)
-      return pow(LMIN / X[0], Params[2]) * log(LMIN / X[0]);
+      return std::pow(LMIN / X[0], Params[2]) * std::log(LMIN / X[0]);
     else
       return 0;
   }
 
   double value_y(const std::vector<double> &Params,
                  const std::vector<double> &X) const {
-    return (X[2] * pow(LMAX / X[0], Params[3]) - Y0) / RY;
+    return (X[2] * std::pow(LMAX / X[0], Params[3]) - Y0) / RY;
   }
 
   double value_dy(const std::vector<double> &Params, int p_index,
                   const std::vector<double> &X) const {
     if (p_index == 3)
-      return X[2] * pow(LMAX / X[0], Params[3]) / RY * log(LMAX / X[0]);
+      return X[2] * std::pow(LMAX / X[0], Params[3]) / RY *
+             std::log(LMAX / X[0]);
     else
       return 0;
   }
 
   double value_e(const std::vector<double> &Params,
                  const std::vector<double> &X) const {
-    return X[3] * pow(LMAX / X[0], Params[3]) / RY;
+    return X[3] * std::pow(LMAX / X[0], Params[3]) / RY;
   }
 
   double value_de(const std::vector<double> &Params, int p_index,
                   const std::vector<double> &X) const {
     if (p_index == 3)
-      return X[3] * pow(LMAX / X[0], Params[3]) / RY * log(LMAX / X[0]);
+      return X[3] * std::pow(LMAX / X[0], Params[3]) / RY *
+             std::log(LMAX / X[0]);
     else
       return 0;
   }

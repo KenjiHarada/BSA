@@ -499,7 +499,7 @@ private:
   const std::vector<int> *pmask;
   const std::vector<GPR_DataSet> *pdatasets;
   const std::vector<std::vector<int> > *pindex;
-/* Randam number by Boost */
+/* Random number by Boost */
 #if __cplusplus >= 201103L
   std::mt19937 mtgen;
   std::uniform_real_distribution<> uniform;
@@ -509,7 +509,7 @@ private:
   double normal() {
     double u1 = uniform();
     double u2 = uniform();
-    return sqrt(-2 * log(u1)) * cos(2 * M_PI * u2);
+    return std::sqrt(-2 * std::log(u1)) * std::cos(2 * M_PI * u2);
   }
 #endif
 };
@@ -521,7 +521,7 @@ private:
 
    This header file defines some fortran functions in BLAS and LAPACK.
 */
-/** BLASS and LAPACK **/
+/** BLAS and LAPACK **/
 extern "C" {
 /// Compute the solution to system of linear equations A * X = B for positive
 /// definite symmetric matrices
@@ -563,8 +563,8 @@ double GPR::Regression<GPR_DataSet>::log_likelihood(
     f_ll -= Y[i] * Y2[i];
   f_ll /= 2;
   for (int i = 0; i < N; ++i)
-    f_ll -= log(xgram[i + i * N]);
-  f_ll -= N * log(2 * M_PI) / 2;
+    f_ll -= std::log(xgram[i + i * N]);
+  f_ll -= N * std::log(2 * M_PI) / 2;
 
   return f_ll;
 }
@@ -672,7 +672,7 @@ void GPR::Regression<GPR_DataSet>::infer(const GPR_DataSet &xdataset,
       variance -= B0[i + pi * N] * B[i + pi * N];
     }
     xc[0] = mean;
-    xc[1] = sqrt(variance);
+    xc[1] = std::sqrt(variance);
     xdataset.reverse_convert(Params, xc, points->at(pi));
   }
 }
@@ -719,7 +719,7 @@ void GPR::Regression<GPR_DataSet>::infer_regression(
       variance -= B0[i + pi * N] * B[i + pi * N];
     }
     point_regressions->at(pi)[0] = mean;
-    point_regressions->at(pi)[1] = sqrt(variance);
+    point_regressions->at(pi)[1] = std::sqrt(variance);
   }
 }
 
@@ -732,7 +732,7 @@ int GPR::Regression<GPR_DataSet>::map_main(
   double epsilon = 1e-8;
   check_setting(epsilon, "MAP::EPSILON", setting);
   double tol = 1e-3;
-  check_setting(epsilon, "MAP::TOL", setting);
+  check_setting(tol, "MAP::TOL", setting);
 #ifndef GPR_NLOG
   std::cerr << "# Optimize parameters to do MAP estimate" << std::endl;
 #endif
@@ -1052,7 +1052,7 @@ int GPR::Regression<GPR_DataSet>::mc_run(std::vector<double> &X,
     proposed_K += P[i] * P[i];
   }
   proposed_K *= 0.5;
-  double wdiff = exp(f(X) - f(Q) + current_K - proposed_K);
+  double wdiff = std::exp(f(X) - f(Q) + current_K - proposed_K);
 #if __cplusplus >= 201103L
   if (std::isfinite(wdiff) && uniform(mtgen) < wdiff) {
     std::copy(Q.begin(), Q.end(), X.begin());
