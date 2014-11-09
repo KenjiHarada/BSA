@@ -13,7 +13,7 @@ BLAS_LIB = blas
 CCFLAGS = -O -I${GSL_DIR}/include -L${GSL_DIR}/lib
 CCLIBS = -lgsl -l${BLAS_LIB}
 #
-APP = bfss bfss_mc bfss_c bfss_c_mc bext bcross
+APP = bfss bfss_mc bfss_c bfss_c_mc bext bcross broot
 all: ${APP}
 bfss: main_fss.cc gpr.hpp gpr_bsa.hpp
 	${CC} $(CCFLAGS) -o bfss main_fss.cc $(CCLIBS)
@@ -27,6 +27,8 @@ bext: main_extrapolate.cc gpr_extrapolate.hpp gpr.hpp
 	${CC} -DGPR_NLOG $(CCFLAGS) -o bext main_extrapolate.cc $(CCLIBS)
 bcross: main_cross.cc gpr_extrapolate.hpp gpr.hpp
 	${CC} -DGPR_NLOG $(CCFLAGS) -o bcross main_cross.cc $(CCLIBS)
+bcross: main_root.cc gpr_extrapolate.hpp gpr.hpp
+	${CC} -DGPR_NLOG $(CCFLAGS) -o broot main_root.cc $(CCLIBS)
 clean:
 	@rm -rf ${APP} *.o test.op test_mc.op test.log test_mc.log Etc/Doxygen
 test:
