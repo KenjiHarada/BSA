@@ -670,7 +670,7 @@ void output(const std::vector<FSS_DATASET> &Datasets,
   }
   // Scaled data
   for (int i = 0; i < Params.size(); ++i)
-    std::cout << "# local p[" << i << "] = " << Params[i] << std::endl;
+    std::cout << "# Global p[" << i << "] = " << Params[i] << std::endl;
 
   for (int t = 0; t < NSET; ++t) {
     std::cout << "# Dataset[" << t << "]" << std::endl;
@@ -686,6 +686,8 @@ void output(const std::vector<FSS_DATASET> &Datasets,
     std::vector<double> Params_local(np);
     for (int j = 0; j < np; ++j)
       Params_local[j] = Params[Index[t][j]];
+    for (int i = 0; i < Params_local.size(); ++i)
+      std::cout << "# Local p[" << i << "] = " << Params_local[i] << std::endl;
 
     /// Scaling results by unnormalized variables
     for (int i = 0; i < Datasets[t].num(); ++i) {
@@ -697,9 +699,9 @@ void output(const std::vector<FSS_DATASET> &Datasets,
       case 1:
         std::cout << (data[1] - Params_local[0]) *
                          std::pow(data[0], Params_local[1]) << " "
-                  << data[2] * std::pow(data[0], -Params_local[2]) << " "
-                  << data[3] * std::pow(data[0], -Params_local[2]) << " "
-                  << std::pow(data[0], -Params_local[6]) << " " << data[0]
+                  << data[2] * std::pow(data[0], -Params_local[3]) << " "
+                  << data[3] * std::pow(data[0], -Params_local[3]) << " "
+                  << std::pow(data[0], -Params_local[2]) << " " << data[0]
                   << " " << data[1] << " " << data[2] << " " << data[3] << " "
                   << std::endl;
         break;
