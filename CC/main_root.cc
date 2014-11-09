@@ -1,4 +1,4 @@
-/* main_cross.cc
+/* main_root.cc
  *
  * Copyright (C) 2012, 2013 Kenji Harada
  * Copyright (C) 2014 Kenji Harada, Yuichi Motoyama
