@@ -1,6 +1,6 @@
 /* bsa.hpp
  *
- * Copyright (C) 2014 Kenji Harada
+ * Copyright (C) 2014, 2015 Kenji Harada
  *
  */
 #ifndef BSA_HPP
@@ -26,7 +26,7 @@
 namespace BSA {
 class DataSet;
 class DataSet_C;
-const static std::string version = "1.00";
+const static std::string version = "1.01";
 };
 /**
    @class BSA::DataSet
@@ -285,6 +285,8 @@ public:
     info["RX"] = RX;
     info["RY"] = RY;
     info["Y0"] = Y0;
+    info["TMIN"] = tmin.find(LMAX)->second;
+    info["TMAX"] = tmax.find(LMAX)->second;
   }
 
   void initialize_parameters(std::vector<double> &Params) const {
@@ -654,6 +656,8 @@ public:
     info["RX"] = RX;
     info["RY"] = RY;
     info["Y0"] = Y0;
+    info["TMIN"] = tmin.find(LMAX)->second;
+    info["TMAX"] = tmax.find(LMAX)->second;
   }
 
   void initialize_parameters(std::vector<double> &Params) const {

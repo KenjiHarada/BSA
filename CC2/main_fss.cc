@@ -1,6 +1,6 @@
 /* main_fss_multi.cc
  *
- * Copyright (C) 2014 Kenji Harada
+ * Copyright (C) 2014, 2015 Kenji Harada
  *
  */
 /**
@@ -43,7 +43,7 @@ can estimates the values of critical exponents and a critical point
 without the technical knowledge. If this new method is useful to your
 study, I hope that you cite my papers to spread this new method.
 
-October, 2014
+April, 2015
 
 Kenji Harada
 
@@ -94,39 +94,41 @@ href="http://hdl.handle.net/10.1103/PhysRevE.84.056704">10.1103/PhysRevE.84.0567
    @code
 COMMAND [Options] [Data file] [Parameters]
   [Option]
-    -c                : estimate confidential intervals of parameters by MC
-(default: off)
-    -e MAP::EPSILON   : set an epsilon for FR-CG algorithm
-    -f SCALING::FORM  : set a scaling form [0:standard, 1:with correction]
-(default: 0)
+    -c                : estimate confidential intervals of parameters by MC (default: off)
+    -e MAP::EPSILON   : set an epsilon for FR-CG algorithm (default: 1e-8)
+    -f SCALING::FORM  : set a scaling form [0:standard, 1:with correction] (default: 0)
     -h                : help
-    -i MC::SEED       : set a seed of random number
-    -l MC::LIMIT      : set the limit to the number of MC samples
-    -m MC::NMCS       : set the number of MC samples
+    -i MC::SEED       : set a seed of random number (default::20140318)
+    -l MC::LIMIT      : set the limit to the number of MC samples (default: 20000)
+    -m MC::NMCS       : set the number of MC samples (default: 1000)
     -n DATA::N        : set the number of data sets (default: 1)
-    -s MAP::STEP_SIZE : set a step size of FR-CG algorithm
-    -t MAP::TOL       : set a tolerance of FR-CG algorithm
+    -s MAP::STEP_SIZE : set a step size of FR-CG algorithm (default: 1e-4)
+    -t MAP::TOL       : set a tolerance of FR-CG algorithm (default: 1e-3)
+    -w OUTPUT::XSCALE : set a xscale of outputted scaling function (default: 1)
   [Data file]
     If data_file = '-', data are loaded from STDIN
   [Parameters]
-    parameter         := mask [0:fixed, 1:unfixed] + initial_value
+    parameter         := mask [0:fixed, 1:unfixed] + initial_value (default of mask: 1, default of initial_value: automatically initialized)
    @endcode
 
    @note
-- Undefined parameters are automatically initialized as default values.
-- It is better to start from good initial values to succeed in
-the inferences of critical exponents, because it is basically a
-non-linear optimization problem.
-- The computational time in Monte Carlo is long, because this
+If you want good inference results, we recommend the option "-c"
+which use a sophisticated Monte Carlo estimation. But the
+computational cost of Monte Carlo estimation is high, because this
 code carefully adjusts the sampling condition in the early stage.
+
+@note
+You can reduce the length of [Parameters] list. If you don't set a value
+of a parameter, it is automatically initialized. But, it is better to
+start from good initial values to succeed in the inferences of
+critical exponents, because we need to solve a non-linear optimization
+problem in the first stage.
 
    @subsection TEST Test
    @code
    % make test
-   ./new_bfss Sample/Ising-square-Binder.dat 1 0.42 1 0.9 1 0.1 > test.op
-2>test.log
-   ./new_bfss -c Sample/Ising-square-Binder.dat 1 0.42 1 0.9 1 0.1 > test_mc.op
-2>test_mc.log
+   ./new_bfss Sample/Ising-square-Binder.dat 1 0.42 1 0.9 1 0.1 > test.op 2>test.log
+   ./new_bfss -c Sample/Ising-square-Binder.dat 1 0.42 1 0.9 1 0.1 > test_mc.op 2>test_mc.log
    @endcode
    The examples of code's output are in the "Sample" folder.
 
@@ -138,26 +140,27 @@ code carefully adjusts the sampling condition in the early stage.
    128   4.200000e-01 6.271240e-02   1.336090e-03
    @endcode
    A line has to be ended with the newline character. Comment lines
-   starts with the character '#'. A null line is ignored. Other lines
-   contain four values.  The value of @f$ L @f$ is in the 1st column
+   starts with the character '#'. A null line is ignored. There are four values
+   in each line. The value of @f$ L @f$ is in the 1st column
    of data file.  The value of @f$ T @f$ is in the 2nd column. The
    value of @f$ A @f$ is in the 3rd column. The value of @f$ \delta
    A @f$ is in the 4th column. If a line is not correctly
    formatted, it will be skipped.
 
    @subsection CASE2 For multiple observables simultaneously (DATA::N > 1)
-   In this case, we will apply a finite-size scaling law to data of each
-observable. But
-   the values of @f$T_c@f$ and @f$c_1@f$ and @f$c_3@f$ are shared. The format of
-data file is as follows.
+   In this case, we will assume an independent scaling function for
+   each observable with different critical exponents. But the values
+   of @f$T_c@f$ and @f$c_1@f$ and @f$c_3@f$ are shared. We will
+   infer values to succeed in all scaling analyses simultaneously.
+   The format of data file is as follows.
    @code
    # ID  L   T            A              Error_of_A
    0   128   4.200000e-01 6.271240e-02   1.336090e-03
    @endcode
 
    A line has to be ended with the newline character. Comment lines
-   starts with the character '#'. A null line is ignored. Other lines
-   contain four values. The value of ID is in the 1st column of data
+   starts with the character '#'. A null line is ignored. There are
+   five values in each line. The value of ID is in the 1st column of data
    file.  It is the identification number of data set. It starts from
    0. The maximum number is (DATA::N - 1).  The value of @f$ L @f$ is
    in the 2nd column.  The value of @f$ T @f$ is in the 3rd
@@ -174,7 +177,8 @@ data file is as follows.
    is defined as
    @f[
    X = (T - T_c ) (L/L_{MAX})^{c_1} / R_X, Y = (A / (L/L_{MAX})^{c_2} -
-   Y_0)/R_Y, E = \delta A/ (L/L_{MAX})^{c_2}/R_Y,
+   Y_0)/R_Y,\\
+   E = \delta A/ (L/L_{MAX})^{c_2}/R_Y,
    @f]
    where @f$ \delta A @f$ is an error of @f$ A @f$ and @f$ L_{MAX} @f$ is the
    largest @f$ L @f$.
@@ -207,8 +211,9 @@ data file is as follows.
    @f] where @f$ A @f$ is an observable. The triplet of a point
    is defined as
    @f[
-   X_1 = (T - T_c ) (L/L_{MAX})^{c_1} / R_X, X_2 = (L/L_{MIN})^{-c_3}, Y = (A /
-   (L/L_{MAX})^{c_2} - Y_0)/R_Y, E = \delta A/ (L/L_{MAX})^{c_2}/R_Y,
+   X_1 = (T - T_c ) (L/L_{MAX})^{c_1} / R_X, X_2 = (L/L_{MIN})^{-c_3},\\
+   Y = (A / (L/L_{MAX})^{c_2} - Y_0)/R_Y,
+   E = \delta A/ (L/L_{MAX})^{c_2}/R_Y,
    @f]
    where @f$ \delta A @f$ is an error of @f$ A @f$ and @f$ L_{MAX} @f$ is the
    largest @f$ L @f$.
@@ -221,7 +226,7 @@ data file is as follows.
    Kernel function is written as
    @f[
    k_G(i, j) = \delta_{ij} (E(i)^2 + \theta_0^2)
-   + \theta_1^2 \exp\left[ - \frac{|X_1(i)- X_1(j)|^2}{2\theta_2^2}\right]
+   + \theta_1^2 \exp\left[ - \frac{|X_1(i)- X_1(j)|^2}{2\theta_2^2}\right]\\
    + \theta_3^2 \exp\left[ - \frac{|X_1(i)- X_1(j)|^2}{2\theta_4^2}\right]
    X_2(i) X_2(j).
    @f]
@@ -241,7 +246,7 @@ data file is as follows.
    @note
    In the case of multiple observables, the first part of a parameter list is
 for shared parameters.
-   The non-shared parameters are repeated after the shared parameters. For
+   The non-shared parameters are put after the shared parameters. For
 example,
    @f$ (T_c, c_1, c_3, c_2, \theta_0, \theta_1, \theta_2, \theta_3, \theta_4,
 c_2', \theta_0', \theta_1', \theta_2', \theta_3', \theta_4')@f$.
@@ -250,13 +255,13 @@ c_2', \theta_0', \theta_1', \theta_2', \theta_3', \theta_4')@f$.
 
    The process of the optimization and sampling of parameters is
    reported to a standard err channel.  The inference results of
-   parameters is reported to a standard output channel. The output for
-   the inference results is explained.  The value of inferred
-   parameters and the confidential intervals are written in header as
-   comments.
+   parameters is reported to a standard output channel.
+
+   @subsection O1 Header comment
+   The value of inferred parameters and the confidential intervals are
+   written in header comments as follows.
    @verbatim
-# p[0] = 4.4068289283487466e-01 6.5315475997187452e-06 --> Average and standard
-deviation
+# p[0] = 4.4068289283487466e-01 6.5315475997187452e-06 --> Average and standard deviation
 ...
 # cov[0, 0]=4.2661114047391705e-11 --> Value of covariance matrix's element
 ...
@@ -264,6 +269,7 @@ deviation
 ...
    @endverbatim
 
+   @subsection O2 Results
    The remain part consists of some outputs for each data set.  A output for a
    data set consists of four groups as follows:
 
@@ -274,7 +280,7 @@ deviation
 
    These output groups are separated two null lines.
 
-   The line of the first group (Scaling results) contains
+   The line of the first group "Scaling results" contains
    as
    @f$ [ (T - T_c ) L^{c_1}, A / L^{c_2}, \delta A/L^{c_2},L, T, A, \delta A ]
 @f$
@@ -284,9 +290,14 @@ deviation
 \delta A ] @f$
    for the case of corrections to scaling.
 
-   The second group(Scaling function) consists of 100 points of the
-   inferred scaling function in the thermodynamic limit. The line
-   contains as @f$ [X, \mu(X), \sqrt{\sigma^2(X)} ]@f$.
+   The second group for "Scaling function" consists of 100 points of the
+   inferred scaling function in the thermodynamic limit. The output range of
+   x axis is equal to the range of the largest system size. It can be changed
+   the option "-w". Three values, @f$ [X, \mu(X), \sqrt{\sigma^2(X)} ]@f$ are
+   outputed in each line. @f$\mu(X)@f$ is an inference result for scaling
+function @f$ F[X] @f$.
+   @f$ \sqrt{\sigma^2(X)} @f$ is a confidential intervale of the inference
+result.
 
    The third and the fourth groups use a normalized variables.
 */
@@ -368,25 +379,31 @@ std::string output_usage() {
   osst << "  [Option]" << std::endl;
   osst << "    -c                : estimate confidential intervals of "
           "parameters by MC (default: off)" << std::endl;
-  osst << "    -e MAP::EPSILON   : set an epsilon for FR-CG algorithm"
-       << std::endl;
+  osst << "    -e MAP::EPSILON   : set an epsilon for FR-CG algorithm "
+          "(default: 1e-8)" << std::endl;
   osst << "    -f SCALING::FORM  : set a scaling form [0:standard, "
           "1:with correction] (default: 0)" << std::endl;
   osst << "    -h                : help" << std::endl;
-  osst << "    -i MC::SEED       : set a seed of random number" << std::endl;
-  osst << "    -l MC::LIMIT      : set the limit to the number of MC samples"
+  osst << "    -i MC::SEED       : set a seed of random number (default: "
+          "20140318)" << std::endl;
+  osst << "    -l MC::LIMIT      : set the limit to the number of MC samples "
+          "(default: 20000)" << std::endl;
+  osst << "    -m MC::NMCS       : set the number of MC samples (default: 1000)"
        << std::endl;
-  osst << "    -m MC::NMCS       : set the number of MC samples" << std::endl;
-  osst << "    -n DATA::N        : set the number of datasets" << std::endl;
-  osst << "    -s MAP::STEP_SIZE : set a step size of FR-CG algorithm"
+  osst << "    -n DATA::N        : set the number of datasets (default: 1)"
        << std::endl;
-  osst << "    -t MAP::TOL       : set a tolerance of FR-CG algorithm"
-       << std::endl;
+  osst << "    -s MAP::STEP_SIZE : set a step size of FR-CG algorithm "
+          "(default: 1e-4)" << std::endl;
+  osst << "    -t MAP::TOL       : set a tolerance of FR-CG algorithm "
+          "(default: 1e-3)" << std::endl;
+  osst << "    -w OUTPUT::XSCALE : set a xscale of outputted scaling function "
+          "(default: 1)" << std::endl;
   osst << "  [Data file]" << std::endl;
   osst << "    If data_file = '-', data are loaded from STDIN" << std::endl;
   osst << "  [Parameters]" << std::endl;
-  osst << "    parameter         := mask [0:fixed, 1:unfixed] + initial_value"
-       << std::endl;
+  osst << "    parameter         := mask [0:fixed, 1:unfixed] + initial_value "
+          "(default of mask: 1, default of initial_value: automatically "
+          "initialized)" << std::endl;
   return osst.str();
 }
 
@@ -419,6 +436,7 @@ void setup_option(std::list<std::string> &ARG,
   setting["SCALING::FORM"] = 0;
   setting["USE_MC"] = 0;
   setting["DATA::N"] = 1;
+  setting["OUTPUT::XSCALE"] = 1.0;
   bool need_help = false;
   for (std::list<std::string>::iterator it = ARG.begin(); it != ARG.end();) {
     if (*it == "-h")
@@ -451,6 +469,9 @@ void setup_option(std::list<std::string> &ARG,
                     setting))
       continue;
     if (load_option("-t", "MAP::TOL", "Not find a tolerance", it, ARG, setting))
+      continue;
+    if (load_option("-w", "OUTPUT::XSCALE",
+                    "X-scale of outputted scaling function", it, ARG, setting))
       continue;
     ++it;
   }
@@ -731,19 +752,37 @@ void output(const std::vector<FSS_DATASET> &Datasets,
           xc.resize(3);
           break;
         }
-        xc[2] = -1 + (2e0 * i) / NUM_POINTS;
+        xc[2] = (((info["TMIN"] + info["TMAX"]) * 0.5 +
+                  setting.find("OUTPUT::XSCALE")->second *
+                      (info["TMAX"] - info["TMIN"]) * 0.5 *
+                      ((2.0 * i) / NUM_POINTS - 1.0)) -
+                 Params_local[0]) /
+                info["RX"];
         point_regressions.push_back(xc);
       }
       bayesian_fss.infer_regression(Datasets[t], Params_local,
                                     &point_regressions);
       for (int i = 0; i < NUM_POINTS; ++i) {
-        std::cout << point_regressions[i][2] *
-                         std::pow(info["LMAX"], Params_local[1]) * info["RX"]
-                  << " "
-                  << (point_regressions[i][0] * info["RY"] + info["Y0"]) /
-                         std::pow(info["LMAX"], Params_local[2]) << " "
-                  << point_regressions[i][1] * info["RY"] /
-                         std::pow(info["LMAX"], Params_local[2]) << std::endl;
+        switch (static_cast<int>(setting.find("SCALING::FORM")->second)) {
+        case 1:
+          std::cout << point_regressions[i][2] *
+                           std::pow(info["LMAX"], Params_local[1]) * info["RX"]
+                    << " "
+                    << (point_regressions[i][0] * info["RY"] + info["Y0"]) /
+                           std::pow(info["LMAX"], Params_local[3]) << " "
+                    << point_regressions[i][1] * info["RY"] /
+                           std::pow(info["LMAX"], Params_local[3]) << std::endl;
+          break;
+        default:
+          std::cout << point_regressions[i][2] *
+                           std::pow(info["LMAX"], Params_local[1]) * info["RX"]
+                    << " "
+                    << (point_regressions[i][0] * info["RY"] + info["Y0"]) /
+                           std::pow(info["LMAX"], Params_local[2]) << " "
+                    << point_regressions[i][1] * info["RY"] /
+                           std::pow(info["LMAX"], Params_local[2]) << std::endl;
+          break;
+        }
       }
       std::cout << std::endl << std::endl;
     }
@@ -782,7 +821,12 @@ void output(const std::vector<FSS_DATASET> &Datasets,
           xc.resize(3);
           break;
         }
-        xc[2] = -1 + (2e0 * i) / NUM_POINTS;
+        xc[2] = (((info["TMIN"] + info["TMAX"]) * 0.5 +
+                  setting.find("OUTPUT::XSCALE")->second *
+                      (info["TMAX"] - info["TMIN"]) * 0.5 *
+                      ((2.0 * i) / NUM_POINTS - 1.0)) -
+                 Params_local[0]) /
+                info["RX"];
         point_regressions.push_back(xc);
       }
       bayesian_fss.infer_regression(Datasets[t], Params_local,
