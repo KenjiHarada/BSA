@@ -8,6 +8,8 @@ The document for this toolkit is in
 
 ## History
 
+(April 21th 2015) Fixed a bug in the output of scaling functions. Added the option to control the x-range of outputted scaling functions.
+
 (November 9th 2014) Fixed a bug in the output of format 1.
 
 (November 6th 2014) Fixed a bug for the use of the option -t.
