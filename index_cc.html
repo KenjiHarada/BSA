@@ -1,14 +1,25 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
   <head>
-    <meta charset='utf-8' />
-    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="description" content="Bayesian Scaling Analysis : " />
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
 
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+    <title>Document of the "CC" folder</title>
 
-    <title>Bayesian Scaling Analysis</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
 <script type="text/javascript"
   src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
@@ -21,30 +32,43 @@ MathJax.Hub.Config({
 
   <body>
 
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/KenjiHarada/BSA">View on GitHub</a>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand " href="https://kenjiharada.github.io/BSA">Bayesian Scaling Analysis</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <form class="navbar-form navbar-right">
+            <a class="btn btn-primary btn-md" role="button" href="https://github.com/KenjiHarada/BSA/zipball/master">Download (.zip)</a>
+            <a class="btn btn-primary btn-md" role="button" href="https://github.com/KenjiHarada/BSA/tarball/master">Download (.tar.gz)</a>
+            <a class="btn btn-success btn-md" role="button" href="https://github.com/KenjiHarada/BSA">View on GitHub</a>
+          </form>
+        </div><!--/.navbar-collapse -->
+      </div>
+    </nav>
 
-          <h1 id="project_title">Bayesian Scaling Analysis</h1>
-          <h2 id="project_tagline">CC</h2>
-
-            <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/KenjiHarada/BSA/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/KenjiHarada/BSA/tarball/master">Download this project as a tar.gz file</a>
-            </section>
-        </header>
+    <!-- Main jumbotron for a primary marketing message or call to action -->
+    <div class="jumbotron">
+      <div class="container">
+        <h1>Document of the "CC" folder</h1>
+        <p>If you use a new command in the "CC2" folder,
+          please read <a href="index_cc2.html">this new document</a>.
+        </p>
+      </div>
     </div>
 
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
-        <h3>
-<a name="welcome" class="anchor" href="#welcome"><span class="octicon octicon-link"></span></a>Welcome to Toolkit for Bayesian Scaling Analysis and the application codes.</h3>
-
-<p>This toolkit consists of C++ classes for Gaussian process regression(GPR) and Bayesian scaling analysis(BSA) and the application codes for the finite-size scaling analysis.</p>
-
-<p>The BSA is a new method of statistical inference in the scaling analysis of critical phenomena. It is based on Bayesian statistics, most specifically, the GPR. The BSA assumes only the smoothness of a scaling function, and it does not need a form. Thus, it may be more effective than conventional approaches in the scaling analyses of critical phenomena. We find the detail of BSA in the paper (<A HREF="http://hdl.handle.net/10.1103/PhysRevE.84.056704">Kenji Harada, Physical Review E 84 (2011) 056704</a>).</p>
+    <div class="container">
+      <!-- Example row of columns -->
+      <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+          <p><p>This toolkit consists of C++ classes for Gaussian process regression(GPR) and Bayesian scaling analysis(BSA) and the application codes for the finite-size scaling analysis.
+            The BSA is a new method of statistical inference in the scaling analysis of critical phenomena. It is based on Bayesian statistics, most specifically, the GPR. The BSA assumes only the smoothness of a scaling function, and it does not need a form. Thus, it may be more effective than conventional approaches in the scaling analyses of critical phenomena. We find the detail of BSA in the paper (<A HREF="http://hdl.handle.net/10.1103/PhysRevE.84.056704">Kenji Harada, Physical Review E 84 (2011) 056704</a>).</p>
 
 <p>Because the BSA is a new technique, this toolkit is the reference code, but this toolkit is alpha version. Your comment and suggestion are welcome. In particular, there are only C++ codes. I hope the other language codes as python, fortran, c, or perl, etc.. Your contribution is welcome.</p>
 
@@ -268,19 +292,19 @@ Y &=& (A / (L/L_m)^{c_2} \times [( 1 + a
 E &=& \delta A/
    (L/L_m)^{c_2} \times [( 1 + a L_m^{-w}) / ( 1 + a L^{-w})] /R_Y.
 \end{eqnarray}</p>
-   
-      </section>
-    </div>
 
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p class="copyright">Bayesian Scaling Analysis maintained by <a href="https://github.com/KenjiHarada">KenjiHarada</a></p>
-        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+        </div>
+      </div><!-- row -->
+      <footer>
+        <p>&copy; Kenji Harada 2014, 2015</p>
       </footer>
-    </div>
+    </div> <!-- /container -->
 
-    
 
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
   </body>
 </html>
+
