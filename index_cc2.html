@@ -1,14 +1,25 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
   <head>
-    <meta charset='utf-8' />
-    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="description" content="Bayesian Scaling Analysis : " />
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
 
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+    <title>New command "new_bfss" in the CC2 folder</title>
 
-    <title>Bayesian Scaling Analysis</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
 <script type="text/javascript"
   src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
@@ -21,32 +32,43 @@ MathJax.Hub.Config({
 
   <body>
 
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/KenjiHarada/BSA">View on GitHub</a>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand " href="https://kenjiharada.github.io/BSA">Bayesian Scaling Analysis</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <form class="navbar-form navbar-right">
+            <a class="btn btn-primary btn-md" role="button" href="https://github.com/KenjiHarada/BSA/zipball/master">Download (.zip)</a>
+            <a class="btn btn-primary btn-md" role="button" href="https://github.com/KenjiHarada/BSA/tarball/master">Download (.tar.gz)</a>
+            <a class="btn btn-success btn-md" role="button" href="https://github.com/KenjiHarada/BSA">View on GitHub</a>
+          </form>
+        </div><!--/.navbar-collapse -->
+      </div>
+    </nav>
 
-          <h1 id="project_title">Bayesian Scaling Analysis</h1>
-          <h2 id="project_tagline">CC2</h2>
-
-            <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/KenjiHarada/BSA/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/KenjiHarada/BSA/tarball/master">Download this project as a tar.gz file</a>
-            </section>
-        </header>
-    </div>
-
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
-<!--        <h2><a name="welcome" class="anchor" href="#welcome"><span class="octicon octicon-link"></span></a>Document of the new command "new_bfss"</h2>
--->
+    <!-- Main jumbotron for a primary marketing message or call to action -->
+    <div class="jumbotron">
+      <div class="container">
+        <h1>Document of the "CC2" folder</h1>
         <p>
-          The following is the document of the new command "new_bfss" in the "CC2" folders. If you want that of the previous commands in the "CC" folders,
+          This page is the document of a new command "new_bfss" in the "CC2" folder. If you want previous commands in the "CC" folder,
           please read <a href="index_cc.html">this old document</a>.
         </p>
+      </div>
+    </div>
 
-        
+    <div class="container">
+      <!-- Example row of columns -->
+      <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+
 <h2><a class="anchor" id="TOC"></a>
 Table of contents</h2>
 <ul>
@@ -73,7 +95,7 @@ Table of contents</h2>
 </ul>
 <hr/>
 <h2><a class="anchor" id="Comp"></a>Compile</h2>
-        <p>To compile, you can use "make" command as follows. </p>
+        <p>To compile, you can use "make" command in the "CC2" folder as follows. </p>
 <pre>
 % make
 </pre>
@@ -193,18 +215,18 @@ Results</h3>
 <p>The line of the first group "Scaling results" contains as \( [ (T - T_c ) L^{c_1}, A / L^{c_2}, \delta A/L^{c_2},L, T, A, \delta A ] \) for a standard scaling form, and as \( [ (T - T_c ) L^{c_1}, A / L^{c_2}, \delta A/L^{c_2}, L^{-c_3}, L, T, A, \delta A ] \) for the case of corrections to scaling.</p>
 <p>The second group for "Scaling function" consists of 100 points of the inferred scaling function in the thermodynamic limit. The output range of x axis is equal to the range of the largest system size. It can be changed the option "-w". Three values, \( [X, \mu(X), \sqrt{\sigma^2(X)} ]\) are outputed in each line. \(\mu(X)\) is an inference result for scaling function \( F[X] \). \( \sqrt{\sigma^2(X)} \) is a confidential intervale of the inference result.</p>
 <p>The third and the fourth groups use a normalized variables. </p>
-
-      </section>
-    </div>
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p class="copyright">Bayesian Scaling Analysis maintained by <a href="https://github.com/KenjiHarada">KenjiHarada</a></p>
-        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+        </div>
+      </div><!-- row -->
+      <footer>
+        <p>&copy; Kenji Harada 2014, 2015</p>
       </footer>
-    </div>
+    </div> <!-- /container -->
 
-    
 
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
   </body>
 </html>
+

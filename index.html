@@ -1,14 +1,25 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
   <head>
-    <meta charset='utf-8' />
-    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="description" content="Bayesian Scaling Analysis : " />
-
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
 
     <title>Bayesian Scaling Analysis</title>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
 <script type="text/javascript"
   src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
@@ -21,36 +32,49 @@ MathJax.Hub.Config({
 
   <body>
 
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/KenjiHarada/BSA">View on GitHub</a>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand " href="https://kenjiharada.github.io/BSA">Bayesian Scaling Analysis</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <form class="navbar-form navbar-right">
+            <a class="btn btn-primary btn-md" role="button" href="https://github.com/KenjiHarada/BSA/zipball/master">Download (.zip)</a>
+            <a class="btn btn-primary btn-md" role="button" href="https://github.com/KenjiHarada/BSA/tarball/master">Download (.tar.gz)</a>
+            <a class="btn btn-success btn-md" role="button" href="https://github.com/KenjiHarada/BSA">View on GitHub</a>
+          </form>
+        </div><!--/.navbar-collapse -->
+      </div>
+    </nav>
 
-          <h1 id="project_title">Bayesian Scaling Analysis</h1>
-          <h2 id="project_tagline">CC2</h2>
-
-            <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/KenjiHarada/BSA/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/KenjiHarada/BSA/tarball/master">Download this project as a tar.gz file</a>
-            </section>
-        </header>
+    <!-- Main jumbotron for a primary marketing message or call to action -->
+    <div class="jumbotron">
+      <div class="container">
+        <h1>Let's do the Bayesian scaling analysis!</h1>
+        <p>This package includes a reference code of the new kernel
+          method for the finite-size scaling analysis of critical
+          phenomena. Please use a new command in the <a href="index_cc2.html">"CC2"</a> folder.</p>
+      </div>
     </div>
 
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
-        <h3>
-          <a name="welcome" class="anchor" href="#welcome"><span class="octicon octicon-link"></span></a>Welcome to Toolkit for Bayesian Scaling Analysis and the application code.</h3>
+    <div class="container">
+      <!-- Example row of columns -->
+      <div class="row">
+        <div class="col-md-8">
+          <p>The new method is based on the Gaussian process
+          regression, which is called kernel method. After the advent
+          of kernel methods in the machine learning community, the
+          method of data analysis was drastically changed. Because the
+          kernel method is very flexible for complex real data, the
+          power of the kernel method can also help our scaling
+          analysis.</p>
 
-<p>This package includes a reference code of the new kernel method for
-the finite-size scaling analysis of critical phenomena. The new method
-is based on the Gaussian process regression, which is called kernel
-method. After the advent of kernel methods in the machine learning
-community, the method of data analysis was drastically
-changed. Because the kernel method is very flexible for complex real
-data, the power of the kernel method can also help our scaling
-analysis.</p>
-        
 <p>The original
 paper <a href="http://hdl.handle.net/10.1103/PhysRevE.84.056704">[1]</a>
 mainly considered the scaling law without corrections to scaling. The
@@ -92,12 +116,27 @@ study, I hope that you cite my papers to spread this new method.</p>
 
 <p>Kenji Harada</p>
 
-<p>
-Graduate school of informatics, Kyoto University<br>
-E-mail: <a href="mailto:harada@acs.i.kyoto-u.ac.jp">harada@acs.i.kyoto-u.ac.jp</a><br>
-URL: <a href="http://www-fcs.acs.i.kyoto-u.ac.jp/~harada/index_en.html">http://www-fcs.acs.i.kyoto-u.ac.jp/~harada/index_en.html</a><br>
-</p>
-<p>[References] </p>
+
+<address>
+  <ul class="list-unstyled">
+    <li>Graduate school of informatics, Kyoto University, Japan</li>
+    <li>
+      <span class="glyphicon glyphicon-envelope">
+        <a href="mailto:harada@acs.i.kyoto-u.ac.jp">
+          harada@acs.i.kyoto-u.ac.jp
+        </a>
+      </span>
+    </li>
+    <li>
+      <span class="glyphicon glyphicon-user">
+        <a href="http://www-fcs.acs.i.kyoto-u.ac.jp/~harada/index_en.html">
+          http://www-fcs.acs.i.kyoto-u.ac.jp/~harada/index_en.html
+        </a>
+      </span>
+    </li>
+  </ul>
+</address>
+<h5>[References]</h5>
 <ol>
 <li>
 Kenji Harada: <em> Bayesian inference in the scaling analysis of critical phenomena,</em> Physical Review E <b> 84 </b> (2011) 056704. <br />
@@ -106,29 +145,51 @@ DOI: <a href="http://hdl.handle.net/10.1103/PhysRevE.84.056704">10.1103/PhysRevE
 <li>
 Kenji Harada: <em> Kernel Method for Corrections to Scaling,</em> <a href="http://arxiv.org/abs/1410.3622">arXiv:1410.3622</a> (2014). </li>
 </ol>
-<hr/>
-
-<h3>Documents</h3>
-<ol>
-  <li>
-    <a href="index_cc2.html">New command "new_bfss" in the "CC2" folder</a>.
-  </li>
-  <li>
-    <a href="index_cc.html">Old commands in the "CC" folder</a>.
-  </li>
-</ol>
-      </section>
-    </div>
-
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p class="copyright">Bayesian Scaling Analysis maintained by <a href="https://github.com/KenjiHarada">KenjiHarada</a></p>
-        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+          <h1>History</h1>
+          <dl class="dl-horizontal">
+            <dt>April 21th 2015</dt>
+            <dd>Fixed a bug in the output of scaling functions with the option "-f 1". Added the option "-w nnn" to control the x-range of outputted scaling functions.</dd>
+            <dt>November 9th 2014</dt>
+            <dd>Fixed a bug in the output with the option "-f 1".</dd>
+            <dt>November 6th 2014</dt><dd>Fixed a bug for the use of the option -t.</dd>
+            <dt>October 15th 2014</dt><dd>Added the "CC2" folder. The "CC2" folder includes the code of new command "new_bfss" which deals with a finite-size scaling with or without corrections to scaling.</dd>
+            <dt>December 15th 2013</dt><dd>A null line and an unformatted line are skipped.</dd>
+            <dt>November 25th 2013</dt><dd>Fixed the bugs in all application codes. These bugs count the last data point in a data file or STDIN doubly.</dd>
+            <dt>July 5th 2013</dt><dd>First release.</dd>
+          </dl>
+        </div>
+        <div class="col-md-4">
+          <h1><a class="anchor" id="doc"></a>Documents</h1>
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">New CC2 folder</h3>
+            </div>
+            <div class="panel-body">
+              <p> This folder includes a new command of Bayesian finite size scaling.</p>
+              <p><a class="btn btn-primary btn-lg" href="index_cc2.html" role="button">Learn more &raquo;</a></p>
+            </div>
+          </div>
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">Old CC folder</h3>
+            </div>
+            <div class="panel-body">
+              <p> This folder includes an old command of Bayesian finite size scaling.</p>
+              <p><a class="btn btn-primary btn-lg" href="index_cc.html" role="button">Learn more &raquo;</a></p>
+            </div>
+          </div>
+        </div>
+      </div><!-- row -->
+      <footer>
+        <p>&copy; Kenji Harada 2014, 2015</p>
       </footer>
-    </div>
+    </div> <!-- /container -->
 
-    
 
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
   </body>
 </html>
+
