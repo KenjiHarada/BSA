@@ -27,7 +27,7 @@ bext: main_extrapolate.cc gpr_extrapolate.hpp gpr.hpp
 	${CC} -DGPR_NLOG $(CCFLAGS) -o bext main_extrapolate.cc $(CCLIBS)
 bcross: main_cross.cc gpr_extrapolate.hpp gpr.hpp
 	${CC} -DGPR_NLOG $(CCFLAGS) -o bcross main_cross.cc $(CCLIBS)
-bcross: main_root.cc gpr_extrapolate.hpp gpr.hpp
+broot: main_root.cc gpr_extrapolate.hpp gpr.hpp
 	${CC} -DGPR_NLOG $(CCFLAGS) -o broot main_root.cc $(CCLIBS)
 clean:
 	@rm -rf ${APP} *.o test.op test_mc.op test.log test_mc.log Etc/Doxygen
