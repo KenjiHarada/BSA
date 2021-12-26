@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link rel="icon" href="../../favicon.ico">
+
+  <title>New command "new_bfss" in the CC2 folder</title>
+
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+  <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+});
+</script>
+</head>
+
+<body>
+
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+          aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand " href="https://kenjiharada.github.io/BSA">Bayesian Scaling Analysis</a>
+      </div>
+      <div id="navbar" class="navbar-collapse collapse">
+        <form class="navbar-form navbar-right">
+          <a class="btn btn-primary btn-md" role="button"
+            href="https://github.com/KenjiHarada/BSA/zipball/master">Download (.zip)</a>
+          <a class="btn btn-primary btn-md" role="button"
+            href="https://github.com/KenjiHarada/BSA/tarball/master">Download (.tar.gz)</a>
+          <a class="btn btn-success btn-md" role="button" href="https://github.com/KenjiHarada/BSA">View on GitHub</a>
+        </form>
+      </div>
+      <!--/.navbar-collapse -->
+    </div>
+  </nav>
+
+  <!-- Main jumbotron for a primary marketing message or call to action -->
+  <div class="jumbotron">
+    <div class="container">
+      <h1>Document of the "CC2" folder</h1>
+      <p>
+        This page is the document of a new command "new_bfss" in the "CC2" folder. If you want previous commands in the
+        "CC" folder,
+        please read <a href="index_cc.html">this old document</a>.
+      </p>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- Example row of columns -->
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+
+        <h2><a class="anchor" id="TOC"></a>
+          Table of contents</h2>
+        <ul>
+          <li><a href="index_cc2.html#Comp">Compile</a></li>
+          <li><a href="index_cc2.html#Usage">Usage</a>
+            <ul>
+              <li><a href="index_cc2.html#TEST">Test</a></li>
+            </ul>
+          </li>
+          <li><a href="index_cc2.html#Data_format">Format of input data file</a>
+            <ul>
+              <li><a href="index_cc2.html#CASE1">For a single observable</a></li>
+              <li><a href="index_cc2.html#CASE2">For multiple observables simultaneously</a></li>
+            </ul>
+          </li>
+          <li><a href="index_cc2.html#SF">Scaling form and parameters</a>
+            <ul>
+              <li><a href="index_cc2.html#C1A">For a standard scaling form</a></li>
+              <li><a href="index_cc2.html#C1B">For a scaling form with corrections to scaling</a></li>
+            </ul>
+          </li>
+          <li><a href="index_cc2.html#output">Output</a>
+            <ul>
+              <li><a href="index_cc2.html#O1">Header comment</a></li>
+              <li><a href="index_cc2.html#O2">Results</a></li>
+            </ul>
+          </li>
+        </ul>
+        <hr />
+        <h2><a class="anchor" id="Comp"></a>Compile</h2>
+        <p>To compile, you can use "make" command in the "CC2" folder as follows. </p>
+        <pre>
+% make
+</pre>
+        <p>Before compiling this code, You need to install (FORTRAN-base) BLAS and LAPACK libraries: For example, intel
+          MKL, ACML, or various free implementations. After that, you need to setup CCLIBS in Makefile to link them
+          correctly.</p>
+        <h2><a class="anchor" id="Usage"></a>Usage</h2>
+        <pre>
+COMMAND [Options] [Data file] [Parameters]
+  [Option]
+    -c                : estimate confidential intervals of parameters by MC (<span class="keywordflow">default</span>: off)
+    -e MAP::EPSILON   : set an epsilon <span class="keywordflow">for</span> FR-CG algorithm (<span class="keywordflow">default</span>: 1e-8)
+    -f SCALING::FORM  : set a scaling form [0:standard, 1:with correction] (<span class="keywordflow">default</span>: 0)
+    -h                : help
+    -i MC::SEED       : set a seed of random number (<span class="keywordflow">default</span>::20140318)
+    -l MC::LIMIT      : set the limit to the number of MC samples (<span class="keywordflow">default</span>: 20000)
+    -m MC::NMCS       : set the number of MC samples (<span class="keywordflow">default</span>: 1000)
+    -n DATA::N        : set the number of data sets (<span class="keywordflow">default</span>: 1)
+    -s MAP::STEP_SIZE : set a step size of FR-CG algorithm (<span class="keywordflow">default</span>: 1e-4)
+    -t MAP::TOL       : set a tolerance of FR-CG algorithm (<span class="keywordflow">default</span>: 1e-3)
+    -w OUTPUT::XSCALE : set a xscale of outputted scaling <span class="keyword">function</span> (<span class="keywordflow">default</span>: 1)
+  [Data file]
+    If data_file = <span class="charliteral">&#39;-&#39;</span>, data are loaded from STDIN
+  [Parameters]
+    parameter         := mask [0:fixed, 1:unfixed] + initial_value (<span class="keywordflow">default</span> of mask: 1, <span class="keywordflow">default</span> of initial_value: automatically initialized)
+</pre>
+
+        <dl class="section note">
+          <dt>Note</dt>
+          <dd>If you want good inference results, we recommend the option "-c" which use a sophisticated Monte Carlo
+            estimation. But the computational cost of Monte Carlo estimation is high, because this code carefully
+            adjusts the sampling condition in the early stage.</dd>
+        </dl>
+        <dl class="section note">
+          <dt>Note</dt>
+          <dd>
+            You can reduce the length of [Parameters] list. If you don't set a value of a parameter, it is automatically
+            initialized. But, it is better to start from good initial values to succeed in the inferences of critical
+            exponents, because we need to solve a non-linear optimization problem in the first stage.</dd>
+        </dl>
+        <h3><a class="anchor" id="TEST"></a>Test</h3>
+        <pre>
+% make test
+./new_bfss Sample/Ising-square-Binder.dat 1 0.42 1 0.9 1 0.1 &gt; test.op 2&gt;test.log
+./new_bfss -c Sample/Ising-square-Binder.dat 1 0.42 1 0.9 1 0.1 &gt; test_mc.op 2&gt;test_mc.log
+</pre>
+        <p> The examples of code's output are in the "Sample" folder.</p>
+        <h2><a class="anchor" id="Data_format"></a>Format of input data file</h2>
+        <h3><a class="anchor" id="CASE1"></a>
+          For a single observable (DATA::N == 1)</h3>
+        <p>The format of data file is as follows. </p>
+        <pre>
+# L   T            A              Error_of_A
+128   4.200000e-01 6.271240e-02   1.336090e-03
+</pre>
+        <p> A line has to be ended with the newline character. Comment lines starts with the character '#'. A null line
+          is ignored. There are four values in each line. The value of \( L \) is in the 1st column of data file. The
+          value of \( T \) is in the 2nd column. The value of \( A \) is in the 3rd column. The value of \( \delta A \)
+          is in the 4th column. If a line is not correctly formatted, it will be skipped.</p>
+        <h3><a class="anchor" id="CASE2"></a>
+          For multiple observables simultaneously (DATA::N &gt; 1)</h3>
+        <p>In this case, we will assume an independent scaling function for each observable with different critical
+          exponents. But the values of \(T_c\) and \(c_1\) and \(c_3\) are shared. We will infer values to succeed in
+          all scaling analyses simultaneously. The format of data file is as follows. </p>
+        <pre>
+# ID  L   T            A              Error_of_A
+0   128   4.200000e-01 6.271240e-02   1.336090e-03
+</pre>
+        <p>A line has to be ended with the newline character. Comment lines starts with the character '#'. A null line
+          is ignored. There are five values in each line. The value of ID is in the 1st column of data file. It is the
+          identification number of data set. It starts from 0. The maximum number is (DATA::N - 1). The value of \( L \)
+          is in the 2nd column. The value of \( T \) is in the 3rd column. The value of \( A \) is in the 4th column.
+          The value of \( \delta A \) is in the 5th column. If a line is not correctly formatted, it will be skipped.
+        </p>
+        <h2><a class="anchor" id="SF"></a>
+          Scaling form and parameters</h2>
+        <h3><a class="anchor" id="C1A"></a>
+          For a standard scaling form</h3>
+        <p>The finite-size scaling form is written as </p>
+        <p class="formulaDsp">
+          \begin{equation} A(T, L) = L^{c_2} F[ ( T - T_c ) L^{c_1} ], \end{equation}
+        </p>
+        <p> where \( A \) is an observable. The triplet of a point is defined as </p>
+        <p class="formulaDsp">
+          \begin{eqnarray} &&X = (T - T_c ) (L/L_{MAX})^{c_1} / R_X, Y = (A / (L/L_{MAX})^{c_2} - Y_0)/R_Y,\nonumber\\
+          &&E = \delta A/ (L/L_{MAX})^{c_2}/R_Y, \end{eqnarray}
+        </p>
+        <p> where \( \delta A \) is an error of \( A \) and \( L_{MAX} \) is the largest \( L \). Scaling factor \( R_X
+          \) is defined so that the width of X for \( L_{MAX} \) is 2. Scaling factor \( R_Y \) and \( Y_0 \) is defined
+          so that Y for \( L_{MAX} \) is in [-1:1]. The data ansatz is </p>
+        <p class="formulaDsp">
+          \begin{equation} Y \sim F(X) \pm E. \end{equation}
+        </p>
+        <p>Kernel function is written as </p>
+        <p class="formulaDsp">
+          \begin{equation} k_G(i, j) = \delta_{ij} (E(i)^2 + \theta_0^2) + \theta_1^2 \exp( - |X(i)- X(j)|^2 /
+          2\theta_2^2 ). \end{equation}
+        </p>
+        <p>Parameters are defined as Params[0] = \( T_c \), Params[1] = \( c_1 \), Params[2] = \( c_2 \), Params[3] = \(
+          \theta_0 \), Params[4] = \( \theta_1 \), and Params[5] = \( \theta_2 \). Shared parameters are \( T_c \) and
+          \( c_1 \).</p>
+        <h3><a class="anchor" id="C1B"></a>
+          For a scaling form with corrections to scaling</h3>
+        <p>The finite-size scaling form is written as </p>
+        <p class="formulaDsp">
+          \begin{equation} A(T, L) = L^{c_2} F[ ( T - T_c ) L^{c_1}, L^{-c_3} ], \end{equation}
+        </p>
+        <p> where \( A \) is an observable. The triplet of a point is defined as </p>
+        <p class="formulaDsp">
+          \begin{eqnarray}
+          &&X_1 = (T - T_c ) (L/L_{MAX})^{c_1} / R_X, X_2 = (L/L_{MIN})^{-c_3},\nonumber\\
+          &&Y = (A / (L/L_{MAX})^{c_2} - Y_0)/R_Y, E = \delta A/ (L/L_{MAX})^{c_2}/R_Y,
+          \end{eqnarray}
+        </p>
+        <p> where \( \delta A \) is an error of \( A \) and \( L_{MAX} \) is the largest \( L \). Scaling factor \( R_X
+          \) is defined so that the width of X for \( L_{MAX} \) is 2. Scaling factor \( R_Y \) and \( Y_0 \) is defined
+          so that Y for \( L_{MAX}\) is in [-1:1]. The data ansatz is </p>
+        <p class="formulaDsp">
+          \begin{equation} Y \sim F(X_1, X_2) \pm E. \end{equation}
+        </p>
+        <p>Kernel function is written as </p>
+        <p class="formulaDsp">
+          \begin{eqnarray}
+          k_G(i, j) = \delta_{ij} (E(i)^2 + \theta_0^2) + \theta_1^2 \exp\left[ - \frac{|X_1(i)-
+          X_1(j)|^2}{2\theta_2^2}\right]\nonumber\\
+          + \theta_3^2 \exp\left[ - \frac{|X_1(i)- X_1(j)|^2}{2\theta_4^2}\right] X_2(i) X_2(j).
+          \end{eqnarray}
+        </p>
+        <p>Parameters are defined as Params[0] = \( T_c \), Params[1] = \( c_1 \), Params[2] = \( c_3 \), Params[3] = \(
+          c_2 \), Params[4] = \( \theta_0 \), Params[5] = \( \theta_1 \), Params[6] = \( \theta_2 \), Params[7] = \(
+          \theta_3 \), and Params[8] = \( \theta_4 \). Shared parameters are \( T_c, c_1 \) and \( c_3 \).</p>
+        <dl class="section note">
+          <dt>Note</dt>
+          <dd>In the case of multiple observables, the first part of a parameter list is for shared parameters. The
+            non-shared parameters are put after the shared parameters. For example, \( (T_c, c_1, c_3, c_2, \theta_0,
+            \theta_1, \theta_2, \theta_3, \theta_4, c_2&#39;, \theta_0&#39;, \theta_1&#39;, \theta_2&#39;,
+            \theta_3&#39;, \theta_4&#39;)\).</dd>
+        </dl>
+        <h2><a class="anchor" id="output"></a>
+          Output</h2>
+        <p>The process of the optimization and sampling of parameters is reported to a standard err channel. The
+          inference results of parameters is reported to a standard output channel.</p>
+        <h3><a class="anchor" id="O1"></a>
+          Header comment</h3>
+        <p>The value of inferred parameters and the confidential intervals are written in header comments as follows.
+        </p>
+        <pre>
+# p[0] = 4.4068289283487466e-01 6.5315475997187452e-06 --&gt; Average and standard deviation
+...
+# cov[0, 0]=4.2661114047391705e-11 --&gt; Value of covariance matrix's element
+...
+# local p[0] = 4.4068289283487466e-01 --&gt; Value of parameter for scaling data
+...
+</pre>
+        <h3><a class="anchor" id="O2"></a>
+          Results</h3>
+        <p>The remain part consists of some outputs for each data set. A output for a data set consists of four groups
+          as follows:</p>
+        <ul>
+          <li>Scaling results</li>
+          <li>Scaling function</li>
+          <li>Scaling results by normalized variables</li>
+          <li>Scaling function by normalized variables</li>
+        </ul>
+        <p>These output groups are separated two null lines.</p>
+        <p>The line of the first group "Scaling results" contains as \( [ (T - T_c ) L^{c_1}, A / L^{c_2}, \delta
+          A/L^{c_2},L, T, A, \delta A ] \) for a standard scaling form, and as \( [ (T - T_c ) L^{c_1}, A / L^{c_2},
+          \delta A/L^{c_2}, L^{-c_3}, L, T, A, \delta A ] \) for the case of corrections to scaling.</p>
+        <p>The second group for "Scaling function" consists of 100 points of the inferred scaling function in the
+          thermodynamic limit. The output range of x axis is equal to the range of the largest system size. It can be
+          changed the option "-w". Three values, \( [X, \mu(X), \sqrt{\sigma^2(X)} ]\) are outputed in each line.
+          \(\mu(X)\) is an inference result for scaling function \( F[X] \). \( \sqrt{\sigma^2(X)} \) is a confidential
+          intervale of the inference result.</p>
+        <p>The third and the fourth groups use a normalized variables. </p>
+      </div>
+    </div><!-- row -->
+    <footer>
+      <p>&copy; Kenji Harada 2014, 2015</p>
+    </footer>
+  </div> <!-- /container -->
+
+
+  <!-- Bootstrap core JavaScript
+    ================================================== -->
+  <!-- Placed at the end of the document so the pages load faster -->
+  <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+</body>
+
+</html>
