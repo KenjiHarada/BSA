@@ -4,8 +4,7 @@
  *
  */
 /**
-   @mainpage Kernel method for the finite-size scaling analysis of critical
-phenomena
+   @mainpage Kernel method for the finite-size scaling analysis of critical phenomena
 
 This package includes a reference code of the new kernel method for
 the finite-size scaling analysis of critical phenomena. The new method
@@ -50,11 +49,9 @@ Kenji Harada
 [References]
 <ol>
           <li> Kenji Harada:
-            <em> Bayesian inference in the scaling analysis of critical
-phenomena,</em>
+            <em> Bayesian inference in the scaling analysis of critical phenomena,</em>
             Physical Review E <strong> 84 </strong> (2011) 056704.
-            <br>DOI: <a
-href="http://hdl.handle.net/10.1103/PhysRevE.84.056704">10.1103/PhysRevE.84.056704</a>
+            <br>DOI: <a href="http://hdl.handle.net/10.1103/PhysRevE.84.056704">10.1103/PhysRevE.84.056704</a>
           </li>
 
           <li> Kenji Harada:

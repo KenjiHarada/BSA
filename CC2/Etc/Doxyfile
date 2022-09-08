@@ -1,5 +1,5 @@
 PROJECT_NAME           = "Bayesian Scaling Analysis"
-PROJECT_NUMBER         = 1.00
+PROJECT_NUMBER         = 1.01
 PROJECT_LOGO           = "Etc/BSA-logo.png"
 OUTPUT_LANGUAGE        = English
 
