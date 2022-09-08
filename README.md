@@ -1,7 +1,7 @@
 BSA
 ===
 
-Toolkit for Bayesian scaling analysis.
+Toolkit for Bayesian scaling analysis: a reference code of the new kernel method for the finite-size scaling analysis of critical phenomena.
 
 The document for this toolkit is in
        https://kenjiharada.github.io/BSA/
